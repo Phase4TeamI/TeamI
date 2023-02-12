@@ -38,15 +38,18 @@ class RepositoryController extends Controller
      */
     public function store(Request $request)
     {
+        // バリデーション
         $validator = Validator::make($request->all(), [
             'name' => 'required | max:255',
             'repository_url' => 'required',
         ]);
 
+        // バリデーションエラー
         if ($validator->fails()) {
             return redirect()->route('repository.create')->withInput()->withErrors($validator);
         }
 
+        // DBに格納
         $request->merge(['user_id' => Auth::user()->id]);
         $result = Repository::create($request->all());
         return redirect()->route('repository.index');
