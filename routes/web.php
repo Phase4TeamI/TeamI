@@ -6,12 +6,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\Auth\LoginController;
 
+use App\Http\Controllers\IssueController;
+
+Route::resource('issue', IssueController::class);
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
 Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
