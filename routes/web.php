@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\IssueController;
 
-Route::resource('issue', IssueController::class);
+
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
 Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
 
@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('repository', RepositoryController::class);
+    Route::resource('issue', IssueController::class);
 });
 
 require __DIR__ . '/auth.php';
