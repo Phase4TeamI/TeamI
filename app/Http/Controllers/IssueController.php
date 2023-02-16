@@ -22,7 +22,7 @@ class IssueController extends Controller
         );
 
         //JSONデータが置かれているURL先を格納する
-        $url = "https://api.github.com/repos/phase4TeamI/TeamI/issues";
+        $url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=cd45cfb92a22d036f94b&";
 
         //JSONデータを全て文字列に読み込むためにjsonという変数を作製
         $json = file_get_contents($url, false, $ctx);
@@ -42,15 +42,31 @@ class IssueController extends Controller
 
             //各パラメータを配列にする準備
             $titles = array();
+            $label = array();
             $url = array();
+            $users = array();
+
+            //最終的にissue.indexに送る変数
+            $results = array();
 
             //各パラメータの配列に格納
             for($i = 0; $i <= $json_count-1; $i++){
-                $url[] = $ary[$i]["html_url"];
+                $users[] = $ary[$i]["user"]["login"];
                 $titles[] = $ary[$i]["title"];
+                
             }
-            // ddd($url);
-            return view('issue.index',compact('url','titles'));
+            // $results = array($user,$titles);
+
+            
+            for($i = 0; $i <= $json_count-1; $i++){
+                $results[$i] = array(
+                    'user' => $users[$i],
+                    'title' => $titles[$i]
+                );
+                
+            }
+            // ddd($results);
+            return view('issue.index',compact('results'));
         }
 
     }
