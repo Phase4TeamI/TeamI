@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class IssueController extends Controller
 {
@@ -22,10 +23,10 @@ class IssueController extends Controller
         );
 
         //JSONデータが置かれているURL先を格納する
-        $url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=cd45cfb92a22d036f94b&";
+        $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=cd45cfb92a22d036f94b&";
 
         //JSONデータを全て文字列に読み込むためにjsonという変数を作製
-        $json = file_get_contents($url, false, $ctx);
+        $json = file_get_contents($issue_url, false, $ctx);
 
         //文字化け対策
         $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
@@ -33,11 +34,13 @@ class IssueController extends Controller
         //第二引数にtrueを使用することで連想配列にすることができる
         $ary = json_decode($json,true);
 
-        // ddd($ary);
+        
+        
         //各データを格納する処理
         if ($ary === NULL){
             return;
         }else {
+            //issueの件数を取得
             $json_count = count($ary);
 
             //各パラメータを配列にする準備
@@ -45,23 +48,42 @@ class IssueController extends Controller
             $label = array();
             $url = array();
             $users = array();
-
+            $issue_open = array();
             //最終的にissue.indexに送る変数
             $results = array();
 
+            //現在時刻をCarbonライブラリで取得し$nowに代入する
+            $now = new Carbon();
+
             //各パラメータの配列に格納
             for($i = 0; $i <= $json_count-1; $i++){
-                $users[] = $ary[$i]["user"]["login"];
+
+                //アサインされているかどうかを調べる
+                //アサインされていなかったら'null'を代入
+                if(empty($ary[$i]["assignee"]["login"])){
+                    $users[] = 'null';
+                }
+                //アサインされていたらユーザーネームを代入
+                else{
+                    $users[] = $ary[$i]["assignee"]["login"];
+                }
+
+                //タイトルを代入
                 $titles[] = $ary[$i]["title"];
+
+                //'現在時刻'-'issueが作られた時間'でissueがopenしてからの時間を取得
+                $issue_open[] = new Carbon($ary[$i]["created_at"]);
+                //時間差を代入
+                $time[] = $issue_open[$i]->diffInHours($now);
                 
             }
-            // $results = array($user,$titles);
-
-            
+            // ddd($users);
+            //issue.indexに渡す為の連想配列をさ作成する
             for($i = 0; $i <= $json_count-1; $i++){
                 $results[$i] = array(
-                    'user' => $users[$i],
-                    'title' => $titles[$i]
+                    'user'  => $users[$i],
+                    'title' => $titles[$i],
+                    'time'  => $time[$i]
                 );
                 
             }

@@ -29,7 +29,7 @@
                                     {{$result["user"]}}
                                 </td>
                                 <td class="w-3/12 text-center  py-3 px-4 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-200">
-                                    Label
+                                    {{$result["time"]}}時間経過しています
                                 </td>
                                 <td class="w-6/12 text-right py-3 px-4 text-xs font-medium tracking-wider text-gray-700 uppercase dark:text-gray-200">
                                     {{$result["title"]}}
