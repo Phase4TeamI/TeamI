@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepositoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IssueController;
+use App\Http\Controllers\ScoreboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
 Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
@@ -32,8 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('repository', RepositoryController::class);
-
     Route::post('repository/{repository}/adduser', [RepositoryController::class, 'addUser'])->name('repository.adduser');
+    
+    Route::resource('issue', IssueController::class);
+    Route::resource('scoreboard', ScoreboardController::class);
+
 });
 
 require __DIR__.'/auth.php';
