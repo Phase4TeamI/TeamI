@@ -17,7 +17,11 @@ class RepositoryController extends Controller
      */
     public function index()
     {
-        return view('repository.index');
+        $myrepositories = Repository::query()
+        ->where('user_id', Auth::id())
+        ->orderBy('created_at','desc')
+        ->get();
+        return view('repository.index', compact('myrepositories'));
     }
 
     /**
@@ -63,7 +67,8 @@ class RepositoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $repository = Repository::find($id);
+        return view('repository.show', compact('repository'));
     }
 
     /**
@@ -98,5 +103,27 @@ class RepositoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function addUser(Request $request)
+    {
+        // バリデーション
+        $validator = Validator::make($request->all(), [
+            'mail' => 'required|email:filter'
+        ]);
+
+        $repository = Repository::find($request->input('id'));
+        // バリデーションエラー
+        if ($validator->fails()) {
+            return view('repository.show', compact('repository'));
+        }
+        
+        $getUser = User::where('email', '=', $request->input('mail'))->first();
+
+        $user = User::find($getUser->id);
+        $user->repositories()->sync($request->input('id'));
+
+        return view('repository.show', compact('repository'));
     }
 }
