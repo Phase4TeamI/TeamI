@@ -24,8 +24,8 @@ class LoginController extends Controller
         if (!$existingUser) {
             $newUser = User::create([
                 'provider_id' => $user->getId(),
-                'name' => $user->getName(),
-                'email' => $user->getEmail(),
+                'name' => $user->getNickname(),
+                'email' => (string)$user->getEmail(),
             ]);
             $existingUser = $newUser;
         }

@@ -20,6 +20,10 @@
                                 <x-input-label for="repository_url" :value="__('Repository URL')" />
                                 <x-text-input name="repository_url" type="text" class="mt-1 block w-full"/>
                             </div>
+                            <div>
+                                <x-input-label for="webhook_secret" :value="__('Webhook Secret')" />
+                                <x-text-input name="webhook_secret" type="text" class="mt-1 block w-full"/>
+                            </div>
                             <x-primary-button>{{ __('Register repository') }}</x-primary-button>
                         </form>
                     </div>
