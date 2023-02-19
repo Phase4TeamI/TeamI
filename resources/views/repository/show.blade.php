@@ -11,7 +11,7 @@
                     <div class="max-w-xl">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ __('ユーザーの追加') }}
+                                {{ __('管理者用メニュー') }}
                             </h2>
                             <form action="{{ route('repository.adduser', $repository) }}" method="post" class="mt-6 space-y-6">
                                 @csrf
@@ -22,6 +22,9 @@
                                 </div>
                                 <x-primary-button>{{ __('追加') }}</x-primary-button>
                             </form>
+                            <div class="py-2">
+                            </div>
+                            @include('repository.partials.delete-repository')
                         </div>
                     </div>
                 </div>
