@@ -7,7 +7,7 @@
                 <div class="">
                     <div class="flex flex-col">
                       <div class="border-b my-3">
-                        <h3 class="dark:text-white font-bold text-lg mb-3">Issues</h3>
+                        <h3 class="dark:text-white font-bold text-lg mb-3">Open Issues</h3>
                         <table class="w-full">
                           <thead class="bg-white dark:bg-gray-800 border-b">
                             <tr class="w-full flex ">

@@ -7,6 +7,7 @@ use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\IssueController;
+use App\Http\Controllers\ScoreboardController;
 
 
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('repository', RepositoryController::class);
     Route::resource('issue', IssueController::class);
+    Route::resource('scoreboard', ScoreboardController::class);
 });
 
 require __DIR__ . '/auth.php';
