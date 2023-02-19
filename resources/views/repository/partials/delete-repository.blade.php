@@ -5,7 +5,7 @@
     >{{ __('リポジトリの削除') }}</x-danger-button>
 
     <x-modal name="confirm-repository-deletion" focusable>
-        <form method="post" action="{{ route('repository.destroy', $repository) }}" class="p-6">
+        <form method="post" action="{{ route('repository.destroy', $repository->id) }}" class="p-6">
             @csrf
             @method('delete')
 
@@ -23,7 +23,7 @@
                 </x-secondary-button>
 
                 <x-danger-button class="ml-3">
-                    {{ __('Delete Account') }}
+                    {{ __('Delete Repository') }}
                 </x-danger-button>
             </div>
         </form>

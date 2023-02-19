@@ -102,7 +102,8 @@ class RepositoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result = Repository::find($id)->delete();
+        return redirect()->route('repository.index');
     }
 
 
