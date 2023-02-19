@@ -15,23 +15,22 @@ class LoginController extends Controller
         return Socialite::driver('github')->redirect();
     }
 
+    // 初回ログイン時にユーザー情報をデータベースに保存し、以降のログインではログイン処理を行う
     public function handleGithubCallback(Request $request)
     {
         $user = Socialite::driver('github')->stateless()->user();
+        $existingUser = User::where('provider_id', $user->getId())->orWhere('email', $user->getEmail())->first();
 
-        $existingUser = User::where('provider_id', $user->getId())->first();
-
-        if ($existingUser) {
-            Auth::login($existingUser, true);
-        } else {
+        if (!$existingUser) {
             $newUser = User::create([
                 'provider_id' => $user->getId(),
                 'name' => $user->getName(),
                 'email' => $user->getEmail(),
             ]);
-
-            Auth::login($newUser, true);
+            $existingUser = $newUser;
         }
+
+        Auth::login($existingUser, true);
 
         return redirect()->intended('/dashboard');
     }
