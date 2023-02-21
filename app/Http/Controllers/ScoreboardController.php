@@ -24,13 +24,13 @@ class ScoreboardController extends Controller
         //JSONデータが置かれているURL先を格納する
 
         //issueのURL
-        $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues";
+        $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
         //pull requestのURL
-        $pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls";
+        $pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
         //commit
-        $commit_url = "https://api.github.com/repos/phase4TeamI/TeamI/commits";
+        $commit_url = "https://api.github.com/repos/phase4TeamI/TeamI/commits?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
         //members
-        $member_url = "https://api.github.com/orgs/Phase4TeamI/members";
+        $member_url = "https://api.github.com/orgs/Phase4TeamI/members?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
 
         //JSONデータを全て文字列に読み込むためにjsonという変数を作製
         $issue_json = file_get_contents($issue_url, false, $ctx);
@@ -55,9 +55,19 @@ class ScoreboardController extends Controller
         $commit_json_count = count($commit_ary);
         $member_json_count = count($member_ary);
         
+        // ddd($member_json_count);
+        $results[] = array(
+            'issue'  => $issue_json_count,
+            'pull' => $pull_json_count,
+            'commit'  => $commit_json_count,
+            'member' => $member_json_count
+        );
+        // ddd($results);
 
-        return view('scoreboard.index', compact('issue_json_count'));
+        return view('scoreboard.index', compact('results'));
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
