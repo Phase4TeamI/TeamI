@@ -74,16 +74,18 @@ class IssueController extends Controller
                 //'現在時刻'-'issueが作られた時間'でissueがopenしてからの時間を取得
                 $issue_open[] = new Carbon($ary[$i]["created_at"]);
                 //時間差を代入
-                $time[] = $issue_open[$i]->diffInHours($now);
-                
+                //何日と何時間経過したか
+                $day[] = $issue_open[$i]->diffInDays($now);
+                $hour[] = ($issue_open[$i]->diffInHours($now)) % 24;
             }
-            // ddd($users);
+
             //issue.indexに渡す為の連想配列をさ作成する
             for($i = 0; $i <= $json_count-1; $i++){
                 $results[$i] = array(
                     'user'  => $users[$i],
                     'title' => $titles[$i],
-                    'time'  => $time[$i]
+                    'day'  => $day[$i],
+                    'hour' => $hour[$i]
                 );
                 
             }

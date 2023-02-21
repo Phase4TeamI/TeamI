@@ -22,21 +22,42 @@ class ScoreboardController extends Controller
         );
 
         //JSONデータが置かれているURL先を格納する
+
+        //issueのURL
         $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues";
+        //pull requestのURL
+        $pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls";
+        //commit
+        $commit_url = "https://api.github.com/repos/phase4TeamI/TeamI/commits";
+        //members
+        $member_url = "https://api.github.com/orgs/Phase4TeamI/members";
 
         //JSONデータを全て文字列に読み込むためにjsonという変数を作製
-        $json = file_get_contents($issue_url, false, $ctx);
+        $issue_json = file_get_contents($issue_url, false, $ctx);
+        $pull_json = file_get_contents($pull_url, false, $ctx);
+        $commit_json = file_get_contents($commit_url, false, $ctx);
+        $member_json = file_get_contents($member_url, false, $ctx);
 
         //文字化け対策
-        $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+        $issue_json = mb_convert_encoding($issue_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+        $pull_json = mb_convert_encoding($pull_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+        $commit_json = mb_convert_encoding($commit_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+        $member_json = mb_convert_encoding($member_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
         
         //第二引数にtrueを使用することで連想配列にすることができる
-        $ary = json_decode($json,true);
+        $issue_ary = json_decode($issue_json,true);
+        $pull_ary = json_decode($pull_json,true);
+        $commit_ary = json_decode($commit_json,true);
+        $member_ary = json_decode($member_json,true);
 
+        $issue_json_count = count($issue_ary);
+        $pull_json_count = count($pull_ary);
+        $commit_json_count = count($commit_ary);
+        $member_json_count = count($member_ary);
         
-        
-        
-        }
+
+        return view('scoreboard.index', compact('issue_json_count'));
+    }
 
     /**
      * Show the form for creating a new resource.
