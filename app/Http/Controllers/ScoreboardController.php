@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ScoreboardController extends Controller
 {
@@ -90,8 +91,12 @@ class ScoreboardController extends Controller
                 }
             }
 
+            $hours = array();
             for($i = 0; $i <= count($new_close_issue); $i++){
-                $issue_open[] = new Carbon($new_close_ary[$i]["created_at"]);
+                $created_at = new Carbon($new_close_issue[$i]["created_at"]);
+                $closed_at = new Carbon($new_close_issue[$i]["closed_at"]);
+                ddd($closed_at);
+                ddd($created_at->diffInMinutes($closed_at));
             }
 
             ddd($new_close_issue);
