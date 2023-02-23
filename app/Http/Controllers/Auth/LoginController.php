@@ -18,7 +18,6 @@ class LoginController extends Controller
     public function handleGithubCallback(Request $request)
     {
         $user = Socialite::driver('github')->stateless()->user();
-
         $existingUser = User::where('provider_id', $user->getId())->first();
 
         if ($existingUser) {

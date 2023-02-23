@@ -27,7 +27,7 @@ class ScoreboardController extends Controller
         //issueのURL
         $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
         $issue_close_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?state=closed";
-
+        
         // pull requestのURL
         $pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
         $close_pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls?state=close?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
@@ -91,19 +91,21 @@ class ScoreboardController extends Controller
                 }
             }
 
-            $hours = array();
-            for($i = 0; $i <= count($new_close_issue); $i++){
+            $ave_close = 0;
+            for($i = 0; $i <= count($new_close_issue)-1; $i++){
                 $created_at = new Carbon($new_close_issue[$i]["created_at"]);
                 $closed_at = new Carbon($new_close_issue[$i]["closed_at"]);
-                ddd($closed_at);
-                ddd($created_at->diffInMinutes($closed_at));
+                // ddd($new_close_issue[1]);
+                $ave_close += $created_at->diffInMinutes($closed_at);
             }
+            $ave_close = round((double)$ave_close / 60 / count($new_close_issue), 2);
 
-            ddd($new_close_issue);
+            
 
             $issues[] = array(
                 'open'  => $issue_count-$pull_count,
-                'close' => $close_issue_count-$close_pull_count,
+                'close' => $issue_close_count-$close_pull_count,
+                'ave_close'=> $ave_close,
                 // 'pull' => $pull_json_count,
                 // 'commit'  => $commit_json_count,
                 // 'member' => $member_json_count

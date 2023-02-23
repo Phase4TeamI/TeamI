@@ -34,15 +34,27 @@
                         </div>
 
                         <div class="">
-                          <p class="font-mono text-lg">{{$results[0]["issue"]}}</p>
+                          <p class="font-mono text-lg"></p>
                         </div>
                       </div>
 
                       <div class="ml-5 space-y-2 ac-child">
-                        <p class="font-mono text-lg mt-2">　オープンしているissues</p>
-                        <p class="font-mono text-lg ">　クローズしたissues</p>
-                        <p class="font-mono text-lg ">　1issueあたりの平均クローズ時間</p>
-                        <p class="font-mono text-lg ">　issues</p>
+
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg mt-2">　オープンしているissues</p>
+                          <p class="font-mono text-lg">{{$issues[0]["open"]}}</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg ">　クローズしたissue</p>
+                          <p class="font-mono text-lg">{{$issues[0]["close"]}}</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg ">　1issueあたりの平均クローズ時間</p>
+                          <p class="font-mono text-lg">{{$issues[0]["ave_close"]}}H</p>
+                        </div>
+
                       </div>
 
                       <!-- プルリク情報 -->
