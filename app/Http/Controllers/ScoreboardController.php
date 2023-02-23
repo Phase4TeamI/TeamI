@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Client\Factory;
 use Carbon\Carbon;
 
 class ScoreboardController extends Controller
@@ -14,80 +15,44 @@ class ScoreboardController extends Controller
      */
     public function index()
     {
-        //User_Agentの権限を許可する
-        $ctx = stream_context_create(array(
-            'http' => array(
-                'method' => 'GET',
-                'header' => 'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko')
-            )
-        );
+        $client = new Factory();
+        //パーソナルアクセストークンをつけてAPIを叩くことで1時間のリクエスト制限を5000回に緩和する
+        //openしているissueを配列にする
+        $open_issue = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/issues')->json();
 
-        //JSONデータが置かれているURL先を格納する
+        //closeしているisseuを配列にする
+        $close_issue = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/issues?state=closed')->json();
 
-        //issueのURL
-        $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
-        $issue_close_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues?state=closed";
+        //openしているpullを配列にする
+        $open_pull = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/pulls')->json();
+
+        //closeしているpullを配列にする
+        $close_pull = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/pulls?state=close')->json();
+
+        //openしているissueの件数を取得
+        $open_issue_count = count($open_issue);
+        //closeしているissueの件数を取得
+        $close_issue_count = count($close_issue);
         
-        // pull requestのURL
-        $pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
-        $close_pull_url = "https://api.github.com/repos/phase4TeamI/TeamI/pulls?state=close?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
+        //openしているpullの件数を取得
+        $open_pull_count = count($open_pull);
+        //closeしているpullの件数を取得
+        $close_pull_count = count($close_pull);
 
-        // //commit
-        // $commit_url = "https://api.github.com/repos/phase4TeamI/TeamI/commits?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
-        // //members
-        // $member_url = "https://api.github.com/orgs/Phase4TeamI/members?client_id=df3c312a6607af1baa5b&client_secret=5a4d5a8dc7ba604ee3b965d18abe347741c05c09";
-
-        //JSONデータを全て文字列に読み込むためにjsonという変数を作製
-        $issue_json = file_get_contents($issue_url, false, $ctx);
-        $issue_close_json = file_get_contents($issue_close_url, false, $ctx);
-
-        $pull_json = file_get_contents($pull_url, false, $ctx);
-        $close_pull_json = file_get_contents($close_pull_url, false, $ctx);
-        // $commit_json = file_get_contents($commit_url, false, $ctx);
-        // $member_json = file_get_contents($member_url, false, $ctx);
-
-        //文字化け対策
-        $issue_json = mb_convert_encoding($issue_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        $issue_close_json = mb_convert_encoding($issue_close_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-
-        $pull_json = mb_convert_encoding($pull_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        $close_pull_json = mb_convert_encoding($close_pull_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        // $commit_json = mb_convert_encoding($commit_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        // $member_json = mb_convert_encoding($member_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        
-        //第二引数にtrueを使用することで連想配列にすることができる
-        $issue_ary = json_decode($issue_json,true);
-        $issue_close_ary = json_decode($issue_close_json,true);
-
-        $pull_ary = json_decode($pull_json,true);
-        $close_pull_ary = json_decode($close_pull_json,true);
-        // $commit_ary = json_decode($commit_json,true);
-        // $member_ary = json_decode($member_json,true);
-
-        
-        $issue_count = count($issue_ary);
-        $issue_close_count = count($issue_close_ary);
-        
-        $pull_count = count($pull_ary);
-        $close_pull_count = count($close_pull_ary);
-
-        // $commit_json_count = count($commit_ary);
-        // $member_json_count = count($member_ary);
-
-        if ($issue_close_ary === NULL){
+        if ($close_issue === NULL){
             return;
         }else {
 
             //クローズissueにプルリクエストが含まれているのでプルリクを除く処理
             $new_close_issue = array();
 
-            for($i = 0; $i <= $issue_close_count-1; $i++){
+            for($i = 0; $i <= $close_issue_count-1; $i++){
                 //pullが含まれる場合はスキップする
-                if(strpos($issue_close_ary[$i]["html_url"], 'https://github.com/Phase4TeamI/TeamI/pull/') !== false){
-                    
+                if(strpos($close_issue[$i]["html_url"], 'https://github.com/Phase4TeamI/TeamI/pull/') !== false){
+                    //何もしない
                 }
                 else{
-                    $new_close_issue[] = $issue_close_ary[$i];
+                    $new_close_issue[] = $close_issue[$i];
                 }
             }
 
@@ -95,7 +60,6 @@ class ScoreboardController extends Controller
             for($i = 0; $i <= count($new_close_issue)-1; $i++){
                 $created_at = new Carbon($new_close_issue[$i]["created_at"]);
                 $closed_at = new Carbon($new_close_issue[$i]["closed_at"]);
-                // ddd($new_close_issue[1]);
                 $ave_close += $created_at->diffInMinutes($closed_at);
             }
             $ave_close = round((double)$ave_close / 60 / count($new_close_issue), 2);
@@ -103,8 +67,8 @@ class ScoreboardController extends Controller
             
 
             $issues[] = array(
-                'open'  => $issue_count-$pull_count,
-                'close' => $issue_close_count-$close_pull_count,
+                'open'  => $open_issue_count-$open_pull_count,
+                'close' => $close_issue_count-$close_pull_count,
                 'ave_close'=> $ave_close,
                 // 'pull' => $pull_json_count,
                 // 'commit'  => $commit_json_count,
