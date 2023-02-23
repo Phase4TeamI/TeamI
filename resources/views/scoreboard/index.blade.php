@@ -1,15 +1,33 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Scoreboard') }}
-        </h2>
-    </x-slot>
 
     <div class="py-12">
         <div class="w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden  sm:rounded-lg">
                 <div class="grid grid-cols-5 gap-5 p-6">
 
+                <div class="rounded-xl shadow-lg h-48 border ">
+                  <p class="font-mono text-2xl font-bold text-blue-500 m-4">
+                    ISSUE
+                  </p> 
+                </div>
+
+                <div class="rounded-xl shadow-lg h-48 border col-span-2">
+                  <p class="font-mono text-2xl font-bold text-red-500 m-4">
+                    PULL REQUSET
+                  </p> 
+                </div>
+
+                <div class="rounded-xl shadow-lg h-48 border ">
+                  <p class="font-mono text-2xl font-bold text-green-500 m-4">
+                    COMMIT
+                  </p> 
+                </div>
+
+                <div class="rounded-xl shadow-lg h-48 border ">
+                  <p class="font-mono text-2xl font-bold text-yellow-500 m-4">
+                    STARS
+                  </p> 
+                </div>
                   <!-- スコア -->
                   <div class="dark:text-white col-start-1 border rounded-xl shadow-lg col-span-2 ">
                     <div class="w-full  px-3 py-7 rounded-xl">
@@ -65,11 +83,21 @@
                         </div>
                       </div>
 
-                      <div class="ml-5 ac-child">
-                        <p class="font-mono text-lg">　オープンしているプルリク</p>
-                        <p class="font-mono text-lg">　クローズしたプルリク</p>
-                        <p class="font-mono text-lg">　1プルリクあたりの平均マージ・クローズ時間</p>
-                        <p class="font-mono text-lg">　1プルリクに対する平均コメント数</p>
+                      <div class="ml-5 ac-child space-y-2">
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg mt-2">　オープンしているプルリク</p>
+                          <p class="font-mono text-lg">{{$pulls[0]["open"]}}</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg ">　クローズしたプルリク</p>
+                          <p class="font-mono text-lg">{{$pulls[0]["close"]}}</p>
+                        </div>
+
+                        <div class="flex justify-between">
+                          <p class="font-mono text-lg ">　1プルリクあたりの平均マージ・クローズ時間</p>
+                          <p class="font-mono text-lg">{{$pulls[0]["ave_merge"]}}H</p>
+                        </div>
                       </div>
 
                       <!-- コミット情報 -->
