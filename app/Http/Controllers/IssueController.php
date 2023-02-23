@@ -15,31 +15,9 @@ class IssueController extends Controller
      */
     public function index()
     {
-        //User_Agentの権限を許可する
-        // $ctx = stream_context_create(array(
-        //     'http' => array(
-        //         'method' => 'GET',
-        //         'header' => 'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; Touch; rv:11.0) like Gecko')
-        //     )
-        // );
-
         $client = new Factory();
         $response = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/issues');
         $ary = $response->json();
-        
-        // //JSONデータが置かれているURL先を格納する
-        // $issue_url = "https://api.github.com/repos/phase4TeamI/TeamI/issues";
-
-        // //JSONデータを全て文字列に読み込むためにjsonという変数を作製
-        // $json = file_get_contents($issue_url, false, $ctx);
-
-        // //文字化け対策
-        // $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        
-        // //第二引数にtrueを使用することで連想配列にすることができる
-        // $ary = json_decode($json,true);
-
-        
         
         //各データを格納する処理
         if ($ary === NULL){

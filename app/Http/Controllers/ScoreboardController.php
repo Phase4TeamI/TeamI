@@ -70,9 +70,6 @@ class ScoreboardController extends Controller
                 'open'  => $open_issue_count-$open_pull_count,
                 'close' => $close_issue_count-$close_pull_count,
                 'ave_close'=> $ave_close,
-                // 'pull' => $pull_json_count,
-                // 'commit'  => $commit_json_count,
-                // 'member' => $member_json_count
             );
 
         return view('scoreboard.index', compact('issues'));
