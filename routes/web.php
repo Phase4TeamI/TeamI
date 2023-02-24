@@ -22,6 +22,11 @@ use App\Http\Controllers\ScoreboardController;
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
 Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
 
+Route::post('/payload', 'App\Http\Controllers\WebhookController@payload');
+Route::get('/payload', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/', function () {
     return view('welcome');
 });
