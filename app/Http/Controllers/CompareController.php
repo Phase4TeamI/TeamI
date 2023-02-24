@@ -37,22 +37,28 @@ class CompareController extends Controller
      */
     public function store(Request $request)
     {
-        // ここから
+        // 比較1
         $year1 = $request->input('year1');
         $month1 = $request->input('month1');
 
-        // ここまで
+        // 比較2
         $year2 = $request->input('year2');
         $month2 = $request->input('month2');
 
-        $from1 = Carbon::create($year1, $month1, 1)->firstOfMonth();
-        $to1 = Carbon::create($year1, $month1, 1)->lastOfMonth();
+        //比較1の月初めと月末
+        $firstOfMonth_1 = Carbon::create($year1, $month1, 1)->firstOfMonth();
+        $lastOfMonth_1 = Carbon::create($year1, $month1, 1)->lastOfMonth();
+
+        //比較2の月初めと月末
+        $firstOfMonth_2 = Carbon::create($year2, $month2, 1)->firstOfMonth();
+        $lastOfMonth_2 = Carbon::create($year2, $month2, 1)->lastOfMonth();
 
         // ddd($from1);
 
         $client = new Factory();
-        $open_issue = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$from1.'&until='.$to1)->json();
-        ddd($open_issue);
+        $compare_issue_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
+        $compare_issue_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
+        ddd($compare_issue_1);
     }
 
     /**
