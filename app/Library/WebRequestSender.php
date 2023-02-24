@@ -5,9 +5,14 @@ namespace App\Library;
 use Illuminate\Support\Facades\Log;
 
 class WebRequestSender {
+
+    /*  
+     *  概要  引数のURLからレスポンスを受け取る
+     *  引数  String URL
+     *  返値  Array  レスポンス
+     */ 
     public static function getResponse($uri) {
 
-        //User_Agentの権限を許可する
         $context = stream_context_create(array(
             'http' => array(
                 'method' => 'GET',
@@ -16,6 +21,7 @@ class WebRequestSender {
             )
         );
         
+        //200 以外はNullを返す
         if($response = @file_get_contents($uri, false, $context)) {
             $response = json_decode($response,true);
             return $response;
