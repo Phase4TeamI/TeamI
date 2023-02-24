@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -21,11 +22,13 @@ class LoginController extends Controller
         $user = Socialite::driver('github')->stateless()->user();
         $existingUser = User::where('provider_id', $user->getId())->orWhere('email', $user->getEmail())->first();
 
+        Log::info($user->getId());
+
         if (!$existingUser) {
             $newUser = User::create([
                 'provider_id' => $user->getId(),
                 'name' => $user->getNickname(),
-                'email' => (string)$user->getEmail(),
+                'email' => $user->getEmail(),
             ]);
             $existingUser = $newUser;
         }
