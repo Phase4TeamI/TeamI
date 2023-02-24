@@ -53,12 +53,63 @@ class CompareController extends Controller
         $firstOfMonth_2 = Carbon::create($year2, $month2, 1)->firstOfMonth();
         $lastOfMonth_2 = Carbon::create($year2, $month2, 1)->lastOfMonth();
 
-        // ddd($from1);
-
+        
         $client = new Factory();
-        $compare_issue_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
-        $compare_issue_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
-        ddd($compare_issue_1);
+        //state=allにしているのでイシューとプルリク両方入って帰ってくる
+        $compare_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
+        $compare_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
+        
+
+        if ($compare_1 === NULL){
+            return;
+        }else {
+
+            //イシューとプルリクを分ける作業
+            $compare_issue_1 = array();
+            $compare_pull_1 = array();
+
+            for($i = 0; $i <= count($compare_1)-1; $i++){
+                //pullが含まれる場合はpullの配列に格納する。
+                if(strpos($compare_1[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
+                    $compare_pull_1[] = $compare_1[$i];
+                }
+                //issueの時はissueの配列に格納する
+                else{
+                    $compare_issue_1[] = $compare_1[$i];
+                }
+            }
+
+            $new_compare_1[] = array(
+                'issue'  => count($compare_issue_1),
+                'pull' => count($compare_pull_1)
+            );
+        }
+
+        if ($compare_2 === NULL){
+            return;
+        }else {
+
+            //イシューとプルリクを分ける作業
+            $compare_issue_2 = array();
+            $compare_pull_2 = array();
+
+            for($i = 0; $i <= count($compare_2)-1; $i++){
+                //pullが含まれる場合はpullの配列に格納する。
+                if(strpos($compare_2[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
+                    $compare_pull_2[] = $compare_2[$i];
+                }
+                //issueの時はissueの配列に格納する
+                else{
+                    $compare_issue_2[] = $compare_2[$i];
+                }
+            }
+
+            $new_compare_2[] = array(
+                'issue'  => count($compare_issue_2),
+                'pull' => count($compare_pull_2)
+            );
+        }
+        return view('compare.index', compact('new_compare_1', 'new_compare_2'));
     }
 
     /**

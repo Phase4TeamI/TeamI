@@ -20,31 +20,46 @@
                   </button>
               </form>
 
-                <div class="grid grid-cols-5 gap-5 p-6">
+                <div class="grid grid-cols-3 gap-5 p-6 ">
 
-                    <div class="rounded-xl shadow-lg h-48 border ">
-                      <p class="font-mono text-2xl font-bold text-blue-500 m-4">
+                    <div class="rounded-xl shadow-lg h-48 border col-start-1">
+                      <p class="font-mono text-2xl font-bold m-4">
                         ISSUE
                       </p> 
+                      @if(!isset($new_compare_1[0]["issue"]))
+                      <p>0</p>
+                      @else
+                      <p class="font-mono text-2xl font-bold text-blue-500 m-4">
+                      {{$new_compare_1[0]["issue"]}}
+                      </p>
+                      <p class="font-mono text-2xl font-bold text-blue-500 m-4">
+                      {{$new_compare_2[0]["issue"]}}
+                      </p>
+                      @endif
                     </div>
 
-                    <div class="rounded-xl shadow-lg h-48 border col-span-2">
-                      <p class="font-mono text-2xl font-bold text-red-500 m-4">
+                    <div class="rounded-xl shadow-lg  border col-start-2">
+                      <p class="font-mono text-2xl font-bold m-4">
                         PULL REQUSET
                       </p> 
+                      @if(!isset($new_compare_2[0]["pull"]))
+                      <p>0</p>
+                      @else
+                      <p class="font-mono text-2xl font-bold text-red-500 m-4">
+                      {{$new_compare_1[0]["pull"]}}
+                      </p>
+                      <p class="font-mono text-2xl font-bold text-red-500 m-4">
+                      {{$new_compare_2[0]["pull"]}}
+                      </p>
+                      @endif
                     </div>
 
-                    <div class="rounded-xl shadow-lg h-48 border ">
+                    <div class="rounded-xl shadow-lg h-48 border col-start-3">
                       <p class="font-mono text-2xl font-bold text-green-500 m-4">
                         COMMIT
                       </p> 
                     </div>
 
-                    <div class="rounded-xl shadow-lg h-48 border ">
-                      <p class="font-mono text-2xl font-bold text-yellow-500 m-4">
-                        STARS
-                      </p> 
-                    </div>  
 
                 </div>
 
