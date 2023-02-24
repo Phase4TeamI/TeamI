@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use GuzzleHttp\Client;
+use Illuminate\Http\Client\Factory;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -34,7 +37,22 @@ class CompareController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // ここから
+        $year1 = $request->input('year1');
+        $month1 = $request->input('month1');
+
+        // ここまで
+        $year2 = $request->input('year2');
+        $month2 = $request->input('month2');
+
+        $from1 = Carbon::create($year1, $month1, 1)->firstOfMonth();
+        $to1 = Carbon::create($year1, $month1, 1)->lastOfMonth();
+
+        // ddd($from1);
+
+        $client = new Factory();
+        $open_issue = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/phase4TeamI/TeamI/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$from1.'&until='.$to1)->json();
+        ddd($open_issue);
     }
 
     /**
