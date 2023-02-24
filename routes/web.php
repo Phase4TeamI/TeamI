@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepositoryController;
-use App\Http\Controllers\IssueController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('repository', RepositoryController::class);
-    Route::resource('issue', IssueController::class);
 
     Route::post('repository/{repository}/adduser', [RepositoryController::class, 'addUser'])->name('repository.adduser');
 });
