@@ -6,21 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
+use App\Library\WebRequestSender;
+use App\Library\IssueCacher;
+
+use App\Models\Repository;
+
 class WebhookController extends Controller
 {
     public function payload(Request $request)
     {
-        
-        //$payload = mb_convert_encoding($request, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        //$payload = json_decode($payload, true);
 
-        //if ($payload === NULL){
-        //    Log::info("null");
-        //}else {
-        //    Log::info("exist");
-        //}
+        $repository = Repository::where('repository_id', '=', $request["repository"]['id'])->first();
+        if(isset($repository)) {
+            IssueCacher::storeIssue($request["repository"]['id']);
+        }
 
-        Log::info($request["repository"]["html_url"]);
         return;
 
     }
