@@ -26,6 +26,7 @@ class LoginController extends Controller
                 'provider_id' => $user->getId(),
                 'name' => $user->getNickname(),
                 'email' => $user->getEmail(),
+                'avatar_url' => $user->getAvatar(),
             ]);
             $existingUser = $newUser;
         }
