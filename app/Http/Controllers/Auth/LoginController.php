@@ -19,13 +19,16 @@ class LoginController extends Controller
     public function handleGithubCallback(Request $request)
     {
         $user = Socialite::driver('github')->stateless()->user();
+
         $existingUser = User::where('provider_id', $user->getId())->orWhere('email', $user->getEmail())->first();
 
         if (!$existingUser) {
+
             $newUser = User::create([
                 'provider_id' => $user->getId(),
                 'name' => $user->getNickname(),
                 'email' => $user->getEmail(),
+                'avatar_url' => $user->getAvatar(),
             ]);
             $existingUser = $newUser;
         }

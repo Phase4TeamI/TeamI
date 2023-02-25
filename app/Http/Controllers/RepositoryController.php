@@ -128,7 +128,7 @@ class RepositoryController extends Controller
         $repository = Repository::find($request->input('id'));
         // バリデーションエラー
         if ($validator->fails()) {
-            return view('repository.show', compact('repository'));
+            return view('repository.show', compainct('repository'));
         }
         
         $getUser = User::where('email', '=', $request->input('mail'))->first();
