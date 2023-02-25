@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Support\Facades\Http;
+
 use Carbon\Carbon;
+
+
 
 class ScoreboardController extends Controller
 {
@@ -41,6 +45,8 @@ class ScoreboardController extends Controller
         $open_pull_count = count($open_pull);
         //closeしているpullの件数を取得
         $close_pull_count = count($close_pull);
+
+        // ddd($close_pull);
         
         if ($close_issue === NULL){
             return;
@@ -78,6 +84,9 @@ class ScoreboardController extends Controller
         // ----------------------------
 
         //プルリク項目の処理
+
+        $lastMonthStart = now()->startOfMonth();
+        // ddd($lastMonthStart);
         $ave_merge = 0;
         for($i = 0; $i <= $close_pull_count-1; $i++){
             $created_at = new Carbon($close_pull[$i]["created_at"]);
@@ -86,12 +95,12 @@ class ScoreboardController extends Controller
         }
 
         $ave_merge = round((double)$ave_merge / 60 / $close_pull_count, 2);
+
         $pulls[] = array(
             'open'  => $open_pull_count,
             'close' => $close_pull_count,
             'ave_merge'=> $ave_merge,
         );
-        
         return view('scoreboard.index', compact('issues', 'pulls'));
 
         
