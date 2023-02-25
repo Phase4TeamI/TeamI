@@ -5,6 +5,7 @@ use App\Http\Controllers\RepositoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ScoreboardController;
+use App\Http\Controllers\CompareController;
 
 
 /*
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('issue', IssueController::class);
     Route::resource('scoreboard', ScoreboardController::class);
+
+    Route::resource('compare', CompareController::class);
 
 });
 
