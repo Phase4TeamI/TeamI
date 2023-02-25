@@ -4,30 +4,6 @@
         <div class="w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden  sm:rounded-lg">
                 <div class="grid grid-cols-5 gap-5 p-6">
-
-                <div class="rounded-xl shadow-lg h-48 border ">
-                  <p class="font-mono text-2xl font-bold text-blue-500 m-4">
-                    ISSUE
-                  </p> 
-                </div>
-
-                <div class="rounded-xl shadow-lg h-48 border col-span-2">
-                  <p class="font-mono text-2xl font-bold text-red-500 m-4">
-                    PULL REQUSET
-                  </p> 
-                </div>
-
-                <div class="rounded-xl shadow-lg h-48 border ">
-                  <p class="font-mono text-2xl font-bold text-green-500 m-4">
-                    COMMIT
-                  </p> 
-                </div>
-
-                <div class="rounded-xl shadow-lg h-48 border ">
-                  <p class="font-mono text-2xl font-bold text-yellow-500 m-4">
-                    STARS
-                  </p> 
-                </div>
                   <!-- スコア -->
                   <div class="dark:text-white col-start-1 border rounded-xl shadow-lg col-span-2 ">
                     <div class="w-full  px-3 py-7 rounded-xl">
