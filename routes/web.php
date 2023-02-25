@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RepositoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IssueController;
+use App\Http\Controllers\ScoreboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
+Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
+
+Route::post('/payload', 'App\Http\Controllers\WebhookController@payload');
+Route::get('/payload', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::resource('repository', RepositoryController::class);
+    Route::post('repository/{repository}/adduser', [RepositoryController::class, 'addUser'])->name('repository.adduser');
+    
+    Route::resource('issue', IssueController::class);
+    Route::resource('scoreboard', ScoreboardController::class);
+
+});
+
+require __DIR__.'/auth.php';

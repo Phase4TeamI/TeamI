@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'provider_id',
         'name',
         'email',
         'password',
@@ -41,4 +42,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function repositories()
+    {
+        return $this->belongsToMany(Repository::class);
+    }
 }
