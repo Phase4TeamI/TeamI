@@ -5,6 +5,7 @@ use App\Http\Controllers\RepositoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ScoreboardController;
+use App\Http\Controllers\CompareController;
 
 
 /*
@@ -21,6 +22,11 @@ use App\Http\Controllers\ScoreboardController;
 
 Route::get('login/github', 'App\Http\Controllers\Auth\LoginController@redirectToGithub');
 Route::get('login/github/callback', 'App\Http\Controllers\Auth\LoginController@handleGithubCallback');
+
+Route::post('/payload', 'App\Http\Controllers\WebhookController@payload');
+Route::get('/payload', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +46,8 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('issue', IssueController::class);
     Route::resource('scoreboard', ScoreboardController::class);
+
+    Route::resource('compare', CompareController::class);
 
 });
 

@@ -7,6 +7,8 @@ use Validator;
 use App\Models\Repository;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Log;
+use App\Library\WebRequestSender;
 
 class RepositoryController extends Controller
 {
@@ -53,8 +55,17 @@ class RepositoryController extends Controller
             return redirect()->route('repository.create')->withInput()->withErrors($validator);
         }
 
+        //APIにリポジトリを問い合わせ
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $request->input("repository_url"));
+
+        $response = WebRequestSender::getResponse($api_uri);
+        if (!isset($response)) {
+            return redirect()->route('repository.create')->withInput();
+        }
+
         // DBに格納
         $request->merge(['user_id' => Auth::user()->id]);
+        $request->merge(['repository_id' => $response["id"]]);
         $result = Repository::create($request->all());
         return redirect()->route('repository.index');
     }
@@ -117,7 +128,7 @@ class RepositoryController extends Controller
         $repository = Repository::find($request->input('id'));
         // バリデーションエラー
         if ($validator->fails()) {
-            return view('repository.show', compact('repository'));
+            return view('repository.show', compainct('repository'));
         }
         
         $getUser = User::where('email', '=', $request->input('mail'))->first();
