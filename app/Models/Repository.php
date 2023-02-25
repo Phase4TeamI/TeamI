@@ -13,4 +13,19 @@ class Repository extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function issues()
+    {
+      return $this->hasMany(Issue::class);
+    }
 }

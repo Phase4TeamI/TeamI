@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('repository_id')->unique()->nullable();
             $table->string('repository_url')->nullable();
+            $table->string('webhook_secret')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +31,11 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        Schema::table('repositories', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
         Schema::dropIfExists('repositories');
+        Schema::enableForeignKeyConstraints();
     }
 };

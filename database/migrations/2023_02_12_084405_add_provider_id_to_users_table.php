@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('provider_id')->nullable()->after('id');
+            $table->string('provider_id')->unique()->nullable()->after('id');
         });
     }
 
