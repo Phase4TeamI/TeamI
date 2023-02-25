@@ -35,5 +35,8 @@ class PullCacher {
         return $issue;
     }
 
+    /*
+        Setter
+    */
 
 }
