@@ -23,6 +23,7 @@ return new class extends Migration {
             デフォルトのままではエラーになってしまうためnullを許容
             */
             $table->string('password')->nullable();
+            $table->string('avatar_url')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

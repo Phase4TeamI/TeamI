@@ -4,6 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Library\IssueCacher;
+use App\Library\PullCacher;
+use App\Library\CommitCacher;
+
+use Carbon\Carbon;
+
+
+
 class ScoreboardController extends Controller
 {
     /**
@@ -13,8 +21,15 @@ class ScoreboardController extends Controller
      */
     public function index()
     {
-        return view('scoreboard.index');
+        $issue  = IssueCacher::getUserIssue
+        $pull   = 
+        $commit = 
+        return view('scoreboard.index', compact('issues', 'pulls'));
+
+        
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -23,7 +38,7 @@ class ScoreboardController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

@@ -28,4 +28,9 @@ class Repository extends Model
     {
       return $this->hasMany(Issue::class);
     }
+
+    public function pulls()
+    {
+      return $this->hasMany(Pull::class);
+    }
 }

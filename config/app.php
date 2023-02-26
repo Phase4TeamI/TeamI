@@ -213,4 +213,6 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ])->toArray(),
 
+    'dark_mode' => true,
+
 ];
