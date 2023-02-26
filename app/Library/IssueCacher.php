@@ -2,10 +2,9 @@
 
 namespace App\Library;
 
+use App\Models\User;
 use App\Models\Issue;
 use App\Models\Repository;
-
-use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class IssueCacher {
@@ -130,7 +129,7 @@ class IssueCacher {
             ];
         }
 
-        $result = Issue::upsert($query, ['repository_id', 'number'], ['title', 'closed_at', 'created_at']);
+        $result = Issue::upsert($query, ['repository_id', 'number'], ['title', 'closed_at', 'updated_at']);
         return;
     }
 }
