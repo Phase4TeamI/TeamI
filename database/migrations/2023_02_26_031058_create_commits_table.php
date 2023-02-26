@@ -13,12 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('repository_user', function (Blueprint $table) {
+        Schema::create('commits', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('repository_id')->constrained('repositories')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->unique(['repository_id', 'user_id']);
-            $table->timestamps();
+            $table->string('sha');
+            $table->string('html_url')->nullable();
+            $table->string('message')->nullable();
+            $table->string('provider_id');
+            $table->timestamp('committed_at')->nullable();
+
+            $table->unique(['repository_id', 'sha']);
         });
     }
 
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('repository_user');
+        Schema::dropIfExists('commits');
     }
 };

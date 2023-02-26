@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 
 use App\Library\WebRequestSender;
 use App\Library\IssueCacher;
+use App\Library\PullCacher;
+use App\Library\CommitCacher;
 
 use App\Models\Repository;
 
@@ -19,6 +21,8 @@ class WebhookController extends Controller
         $repository = Repository::where('repository_id', '=', $request["repository"]['id'])->first();
         if(isset($repository)) {
             IssueCacher::storeIssue($request["repository"]['id']);
+            PullCacher::storePull($request["repository"]['id']);
+            CommitCacher::storeCommit($request["repository"]['id']);
         }
 
         return;

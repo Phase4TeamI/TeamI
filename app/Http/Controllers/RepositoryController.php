@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 use Validator;
+use Auth;
+
 use App\Models\Repository;
 use App\Models\User;
-use Auth;
-use Illuminate\Support\Facades\Log;
+use App\Models\Commit;
+
 use App\Library\WebRequestSender;
 use App\Library\IssueCacher;
+use App\Library\PullCacher;
+use App\Library\CommitCacher;
+use App\Library\TimeExchanger;
 
 class RepositoryController extends Controller
 {
@@ -83,7 +90,71 @@ class RepositoryController extends Controller
     public function show($id)
     {
         $repository = Repository::find($id);
-        return view('repository.show', compact('repository'));
+
+        $issues  = IssueCacher::getUserIssue($id, Auth::user()->id);
+        $pulls   = PullCacher::getUserPull($id, Auth::user()->id);
+
+        //Issueの情報を計算
+        $stateIssue = array(
+            "open" => 0,
+            "closed" => 0,
+            "average" => null,
+        );
+        $issueClosedAverage = [];
+        foreach($issues as $issue) {
+            if(isset($issue["closed_at"])) {
+                $stateIssue["closed"]++;
+                $issueClosedAverage[] = strtotime($issue["closed_at"]) - strtotime($issue["created_at"]);
+            } else {
+                $stateIssue["open"]++;
+            }
+        }
+        $stateIssue["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($issueClosedAverage) / count($issueClosedAverage)));
+
+        //Pullの情報を計算
+        $statePull = array(
+            "open" => 0,
+            "merged" => 0,
+            "average" => null,
+        );
+        $pullClosedAverage = [];
+        foreach($pulls as $pull) {
+            if(isset($pull["merged_at"])) {
+                $statePull["merged"]++;
+                $pullClosedAverage[] = strtotime($pull["merged_at"]) - strtotime($pull["created_at"]);
+            } else {
+                $statePull["open"]++;
+            }
+        }
+        $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
+
+        //Commitの情報を計算
+        $stateCommit = array(
+            "commit" => 0,
+            "average" => null,
+        );
+        //平均コミット量
+        $queryCount = "count(case when repository_id = " . $id . " and provider_id = " . Auth::user()->provider_id . " then 1 else null end) as commit";
+        $dayCommits = Commit::Query()
+        ->selectRaw('date_format(committed_at, "%Y-%m-%d") as day')
+        ->selectRaw($queryCount)
+        ->groupBy('day')
+        ->orderBy('day','asc')
+        ->get()->toArray();
+        
+        $averageCommit = [];
+        foreach($dayCommits as $dayCommit) {
+            if($dayCommit["commit"] > 0) {
+                $averageCommit[] = $dayCommit["commit"];
+            }
+        }
+        $stateCommit["average"] = floor(array_sum($averageCommit) / count($averageCommit));
+        $stateCommit["commit"] = Commit::Query()
+        ->where('repository_id', $id)
+        ->where('provider_id', Auth::user()->provider_id)
+        ->get()->count();
+
+        return view('repository.show', compact('repository', 'stateIssue', 'statePull', 'stateCommit'));
     }
 
     /**
