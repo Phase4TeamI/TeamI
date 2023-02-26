@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Client\Factory;
 use Carbon\Carbon;
+use App\Library\IssueCacher;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
 class CompareController extends Controller
 {
     /**
@@ -18,7 +20,7 @@ class CompareController extends Controller
     {
 
         $labels[] = array(
-            '2020年', '2022年'
+            '20xx年', '20xx年'
         );
 
         $new_compare_1[] = array(
@@ -70,63 +72,86 @@ class CompareController extends Controller
         $firstOfMonth_2 = Carbon::create($year2, $month2, 1)->firstOfMonth();
         $lastOfMonth_2 = Carbon::create($year2, $month2, 1)->lastOfMonth();
 
+        //chart.jsに渡すためのlabelを作成
+        $labels[] = array(
+            $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
+        );
+
+        // $client = new Factory();
+        // //state=allにしているのでイシューとプルリク両方入って帰ってくる
+        // $compare_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
+        // $compare_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
         
-        $client = new Factory();
-        //state=allにしているのでイシューとプルリク両方入って帰ってくる
-        $compare_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
-        $compare_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
-        
 
-        if ($compare_1 === NULL){
-            return;
-        }else {
+        //最終的に格納する配列
+        $new_compare_issue_1 = array();
 
-            //イシューとプルリクを分ける作業
-            $compare_issue_1 = array();
-            $compare_pull_1 = array();
+        //比較1の年月だけ求める 例：2022-02
+        $data_1 = substr($firstOfMonth_1, 0, 7);
 
-            for($i = 0; $i <= count($compare_1)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_1[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_1[] = $compare_1[$i];
+        //全てのイシューを取得する
+        $OpenedIssues_1 = IssueCacher::getIssue(1);
+
+        $new_OpenedIssues_1 = array();
+        //比較1の年月のclosed issueを配列に入れる
+        foreach($OpenedIssues_1 as $OI_1){
+
+            //比較1の年月が含まれる場合は処理する
+                if(strstr($OI_1->created_at, $data_1) !== false){
+                    $new_OpenedIssues_1[] = $OI_1;
                 }
-                //issueの時はissueの配列に格納する
                 else{
-                    $compare_issue_1[] = $compare_1[$i];
+                    //何もしない
                 }
-            }
+        }
 
-            $new_compare_1[] = array(
-                'issue'  => count($compare_issue_1),
-                'pull' => count($compare_pull_1)
+
+        //クローズされたイシューを全件取得する
+        $ClosedIssues_1 = IssueCacher::getClosedIssue(1);
+        
+
+        $new_ClosedIssues_1 = array();
+        //比較1の年月のclosed issueを配列に入れる
+        foreach($ClosedIssues_1 as $CI_1){
+
+            //比較1の年月が含まれる場合は処理する
+                if(strstr($CI_1->closed_at, $data_1) !== false){
+                    $new_ClosedIssues_1[] = $CI_1;
+                }
+                else{
+                    //何もしない
+                }
+        }
+
+        //クローズされたissueがなかったら(配列の中身が空だったら)0を代入する
+        if(empty($new_ClosedIssues_1)){
+            $new_compare_issue_1[] = array(
+                'opened_issue'  => 0,
+                'closed_issue'  => 0,
+                'ave_closed' => 0
+            );
+        }
+        //クローズされたissueがあれば配列に追加する
+        else{
+            $ave_closed_1 = 0;
+            foreach($new_ClosedIssues_1 as $new_CI_1){
+                $created_at = new Carbon($new_CI_1->created_at);
+                $closed_at = new Carbon($new_CI_1->closed_at);
+                $ave_closed_1 += $created_at->diffInMinutes($closed_at);
+            }
+            $ave_closed_1 = round((double)$ave_closed_1 / 60 / count($new_ClosedIssues_1), 2);
+            //配列に代入する
+            $new_compare_issue_1[] = array(
+                'opened_issue'  => count($new_OpenedIssues_1),
+                'closed_issue'  => count($new_ClosedIssues_1),
+                'ave_closed' => $ave_closed_1
             );
         }
 
-        if ($compare_2 === NULL){
-            return;
-        }else {
+        // ddd($new_compare_issue_1);
 
-            //イシューとプルリクを分ける作業
-            $compare_issue_2 = array();
-            $compare_pull_2 = array();
 
-            for($i = 0; $i <= count($compare_2)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_2[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_2[] = $compare_2[$i];
-                }
-                //issueの時はissueの配列に格納する
-                else{
-                    $compare_issue_2[] = $compare_2[$i];
-                }
-            }
-
-            $new_compare_2[] = array(
-                'issue'  => count($compare_issue_2),
-                'pull' => count($compare_pull_2)
-            );
-        }
-        return view('compare.index', compact('new_compare_1', 'new_compare_2'));
+        return view('compare.index', compact('labels','new_compare_issue_1'));
     }
 
     /**
