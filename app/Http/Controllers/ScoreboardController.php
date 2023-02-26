@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\Http;
-
+use App\Library\IssueCacher;
 use Carbon\Carbon;
 
 
@@ -19,6 +19,7 @@ class ScoreboardController extends Controller
      */
     public function index()
     {
+
         $client = new Factory();
 
         //issue項目の処理

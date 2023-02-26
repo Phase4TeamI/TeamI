@@ -16,7 +16,22 @@ class CompareController extends Controller
      */
     public function index()
     {
-        return view('compare.index');
+
+        $labels = ['2020年', '2022年'];
+
+        $new_compare_1 = [
+            'issue' => 10,
+            'pull' => 20,
+            'commit' => 100
+        ];
+        
+        $new_compare_2 = [
+            'issue' => 20,
+            'pull' => 40,
+            'commit' => 70
+        ];
+
+        return view('compare.index', compact('labels', 'new_compare_1','new_compare_2'));
     }
 
     /**

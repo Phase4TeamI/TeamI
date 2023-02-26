@@ -19,20 +19,19 @@ class IssueCacher {
      *  返値  Array  レスポンス
      */ 
     public static function getIssueFromRemote($repository_url) {
-        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/issues?state=all";
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/issues?state=all&per_page=100";
         $response = WebRequestSender::getResponse($api_uri);
-
         if (!isset($response)) {
             return [];
         }
-
+        
         $issue = array();
         foreach ($response as $rep) {
             if(!array_key_exists("pull_request", $rep)) {
                 $issue[] = $rep;
             }
         }
-
+        
         return $issue;
     }
 
