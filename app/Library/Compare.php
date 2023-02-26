@@ -9,15 +9,14 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class Compare {
-
-
-
+    
     /*  
      *  概要  日付データから年と月のみを抽出する
      *  引数  String  年  String  月
      *  返値  String  例:2020-2
      */ 
     public static function subDay($year, $month) {
+
         $firstOfMonth = Carbon::create($year, $month, 1)->firstOfMonth();
 
         $data = substr($firstOfMonth, 0, 7);
