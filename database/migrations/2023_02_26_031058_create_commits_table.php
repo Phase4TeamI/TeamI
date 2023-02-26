@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('repository_id')->constrained('repositories')->cascadeOnDelete();
             $table->string('sha');
             $table->string('html_url')->nullable();
-            $table->string('message')->nullable();
+            $table->text('message')->nullable();
             $table->string('provider_id');
             $table->timestamp('committed_at')->nullable();
 

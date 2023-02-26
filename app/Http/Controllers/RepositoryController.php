@@ -17,6 +17,7 @@ use App\Library\IssueCacher;
 use App\Library\PullCacher;
 use App\Library\CommitCacher;
 use App\Library\TimeExchanger;
+use App\Library\ScoreManager;
 
 class RepositoryController extends Controller
 {
@@ -78,6 +79,8 @@ class RepositoryController extends Controller
         $result = Repository::create($request->all());
         // Issueの登録
         IssueCacher::storeIssue($response['id']);
+        PullCacher::storePull($response['id']);
+        CommitCacher::storeCommit($response['id']);
         return redirect()->route('repository.index');
     }
 
@@ -153,6 +156,8 @@ class RepositoryController extends Controller
         ->where('repository_id', $id)
         ->where('provider_id', Auth::user()->provider_id)
         ->get()->count();
+
+        ScoreManager::storeScore(1, 1, "2023", "02");
 
         return view('repository.show', compact('repository', 'stateIssue', 'statePull', 'stateCommit'));
     }
