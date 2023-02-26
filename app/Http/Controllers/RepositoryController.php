@@ -9,6 +9,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Log;
 use App\Library\WebRequestSender;
+use App\Library\IssueCacher;
 
 class RepositoryController extends Controller
 {
@@ -64,9 +65,12 @@ class RepositoryController extends Controller
         }
 
         // DBに格納
+        // リポジトリの登録
         $request->merge(['user_id' => Auth::user()->id]);
         $request->merge(['repository_id' => $response["id"]]);
         $result = Repository::create($request->all());
+        // Issueの登録
+        IssueCacher::storeIssue($response['id']);
         return redirect()->route('repository.index');
     }
 
