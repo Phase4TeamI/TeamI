@@ -82,6 +82,7 @@ class RepositoryController extends Controller
         PullCacher::storePull($response['id']);
         CommitCacher::storeCommit($response['id']);
         return redirect()->route('repository.index');
+
     }
 
     /**
@@ -129,6 +130,7 @@ class RepositoryController extends Controller
                 $statePull["open"]++;
             }
         }
+        ddd($pullClosedAverage);
         $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
 
         //Commitの情報を計算

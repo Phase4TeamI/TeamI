@@ -20,13 +20,42 @@ class PullCacher {
      *  返値  Array  レスポンス
      */ 
     public static function getPullFromRemote($repository_url) {
-        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/pulls?state=all";
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/pulls?state=all&per_page=100";
         $response = WebRequestSender::getResponse($api_uri);
 
         if (!isset($response)) {
             return [];
         }
         return $response;
+    }
+
+    /*  
+     *  概要  DBから全てのプルリクを取得
+     *  引数  String リポジトリID (repository.id)
+     *  返値  Array  DBクエリの結果
+     */ 
+    public static function getpull($repository_id) {
+        $pulls = Pull::query()
+        ->where('repository_id', $repository_id)
+        ->orderBy('id','asc')
+        ->get();
+
+        return $pulls;
+    }
+
+    /*  
+     *  概要  DBから全てのクローズ済みプルリクを取得
+     *  引数  String リポジトリID (repository.id)
+     *  返値  Array  DBクエリの結果
+     */ 
+    public static function getClosedPull($repository_id) {
+        $pulls = Pull::query()
+        ->where('repository_id', $repository_id)
+        ->whereNotNull('closed_at')
+        ->orderBy('id','asc')
+        ->get();
+
+        return $pulls;
     }
 
     /*  

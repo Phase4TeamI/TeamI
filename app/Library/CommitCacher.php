@@ -20,13 +20,31 @@ class CommitCacher {
      *  返値  Array  レスポンス
      */ 
     public static function getCommitFromRemote($repository_url) {
-        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/commits?state=all";
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/commits?state=all&per_page=100&page=1";
+        $api_uri_2 = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/commits?state=all&per_page=100&page=2";
         $response = WebRequestSender::getResponse($api_uri);
+        $response_2 = WebRequestSender::getResponse($api_uri_2);
 
+        $array = array_merge($response, $response_2);
+        
         if (!isset($response)) {
             return [];
         }
-        return $response;
+        return $array;
+    }
+
+    /*  
+     *  概要  DBから全てのCommitを取得
+     *  引数  String リポジトリID (repository.id)
+     *  返値  Array  DBクエリの結果
+     */ 
+    public static function getFullCommit($repository_id) {
+        $commits = Commit::query()
+        ->where('repository_id', $repository_id)
+        ->orderBy('id','asc')
+        ->get();
+        
+        return $commits;
     }
 
     /*  
