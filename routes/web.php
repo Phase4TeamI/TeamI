@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('scoreboard', ScoreboardController::class);
 
     Route::resource('compare', CompareController::class);
-
 });
 
 require __DIR__.'/auth.php';

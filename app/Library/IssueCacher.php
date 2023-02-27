@@ -5,7 +5,6 @@ namespace App\Library;
 use App\Models\User;
 use App\Models\Issue;
 use App\Models\Repository;
-
 use Illuminate\Support\Facades\Log;
 
 class IssueCacher {
@@ -20,7 +19,7 @@ class IssueCacher {
      *  返値  Array  レスポンス
      */ 
     public static function getIssueFromRemote($repository_url) {
-        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/issues?state=all";
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/issues?state=all&per_page=100";
         $response = WebRequestSender::getResponse($api_uri);
 
         if (!isset($response)) {
@@ -45,6 +44,21 @@ class IssueCacher {
     public static function getIssue($repository_id) {
         $issues = Issue::query()
         ->where('repository_id', $repository_id)
+        ->orderBy('id','asc')
+        ->get();
+
+        return $issues;
+    }
+
+    /*  
+     *  概要  DBから全てのクローズ済みIssueを取得
+     *  引数  String リポジトリID (repository.id)
+     *  返値  Array  DBクエリの結果
+     */ 
+    public static function getClosedIssue($repository_id) {
+        $issues = Issue::query()
+        ->where('repository_id', $repository_id)
+        ->whereNotNull('closed_at')
         ->orderBy('id','asc')
         ->get();
 
