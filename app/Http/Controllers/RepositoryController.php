@@ -94,8 +94,8 @@ class RepositoryController extends Controller
     {
         $repository = Repository::find($id);
 
-        $issues  = IssueCacher::getUserIssue($id, Auth::user()->id);
-        $pulls   = PullCacher::getUserPull($id, Auth::user()->id);
+        $issues = IssueCacher::getUserIssue($id, Auth::user()->id);
+        $pulls  = PullCacher::getUserPull($id, Auth::user()->id);
 
         //Issueの情報を計算
         $stateIssue = array(
@@ -157,9 +157,22 @@ class RepositoryController extends Controller
         ->where('provider_id', Auth::user()->provider_id)
         ->get()->count();
 
-        ScoreManager::storeScore(1, 1, "2023", "02");
+        ScoreManager::storeScore($id, Auth::user()->id, date("Y"), date("m"));
+        $monthlyScore  = ScoreManager::getUserMonthlyScore($id, Auth::user()->id);
+        $scores  = ScoreManager::getUserScores($id, Auth::user()->id);
+        
+        $scoreArray = [];
+        $i = 0;
+        foreach($scores as $score) {
+            if($i >= 10) {
+                break;
+            }
+            $scoreArray[$score["day"]] = $score["score"];
+            $i++;
+        }
+        $scoreArray = array_reverse($scoreArray);
 
-        return view('repository.show', compact('repository', 'stateIssue', 'statePull', 'stateCommit'));
+        return view('repository.show', compact('repository', 'stateIssue', 'statePull', 'stateCommit', 'monthlyScore', 'scoreArray'));
     }
 
     /**

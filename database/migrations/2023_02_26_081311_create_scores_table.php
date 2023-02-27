@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('repository_id')->constrained('repositories')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->integer('score');
             $table->timestamps();

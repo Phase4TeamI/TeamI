@@ -17,10 +17,32 @@ use Illuminate\Support\Facades\Log;
 
 class ScoreManager {
 
+    public static function getUserMonthlyScore($repository_id, $user_id) {
+        $score = Score::query()
+        ->whereDate('updated_at', date("Y-m-d"))
+        ->where('repository_id', $repository_id)
+        ->where('user_id', $user_id)
+        ->orderBy('updated_at','desc')
+        ->first();
+
+        return $score->score;
+    }
+
+    public static function getUserScores($repository_id, $user_id) {
+        $score = Score::query()
+        ->selectRaw('date_format(updated_at, "%Y-%m") as day')
+        ->selectRaw('MAX(score) as score')
+        ->where('repository_id', $repository_id)
+        ->where('user_id', $user_id)
+        ->groupBy('day')
+        ->orderBy('day', 'desc')
+        ->get()->toArray();
+        return $score;
+    }
+
     public static function calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged) {
         return floor($issueClosedAverage / (($issueClosed + $commit) * $pullRequestMerged));
     }
-
 
     //指定した年月の下記値を取得する
     //$issueClosed        Issueのクローズ数
@@ -71,16 +93,31 @@ class ScoreManager {
         ->orderBy('id','asc')
         ->get()->count();
 
-        Log::info("Commit:".$commit);
-        Log::info("IssueClosed:".$issueClosed);
-        Log::info("IssueClosedAverage:".$issueClosedAverage);
-        Log::info("PullRequestMerged:".$pullRequestMerged);
-        return;
+        $score = ScoreManager::calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged);
 
-        $score = ScoreManager::calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged)
-        $result = Repository::create([
-            "user_id" => $user_id,
-            "score" => $score,
-        ]);
+        //今日のデータが既に格納されているかチェック
+        $isExistScore = Score::query()
+        ->whereDate('created_at', date("Y-m-d"))
+        ->where('repository_id', $repository_id)
+        ->where('user_id', $user_id)
+        ->get()->toArray();
+
+        if(empty($isExistScore)) {
+            $result = Score::create([
+                "repository_id" => $repository_id,
+                "user_id" => $user_id,
+                "score" => $score,
+            ]);
+        } else {
+            $result = Score::query()
+            ->whereDate('created_at', date("Y-m-d"))
+            ->where('repository_id', $repository_id)
+            ->where('user_id', $user_id)
+            ->update([
+                "score" => $score,
+            ]);
+        }
+
+        return;
     }
 }

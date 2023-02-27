@@ -13,12 +13,40 @@
                   <div class="dark:text-white col-start-1 border rounded-xl shadow-lg col-span-2 ">
                     <div class="w-full  px-3 py-7 rounded-xl">
                       <h3 class="font-mono text-xl">SCORE</h3>
-                      <p class="font-mono text-5xl mt-3">3356</p>
+                      <p class="font-mono text-5xl mt-3">{{ $monthlyScore }}</p>
                     </div>
                   </div>
 
                   <!-- グラフ -->
-                  <div class="dark:text-white flex items-center justify-center px-3 py-7 row-span-2 col-start-3 col-span-3 text-center shadow-lg border rounded-xl">グラフがきます</div>
+                  <div class="flex items-center justify-center px-3 py-7 row-span-2 col-start-3 col-span-3 text-center shadow-lg border rounded-xl bg-white">
+                    <canvas id="score"></canvas>
+                  </div>
+
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+                  <script>
+                    const scoreArray = @json($scoreArray);
+                    let scoreLabel = Object.keys(scoreArray);
+                    let scoreData  = Object.values(scoreArray);
+
+                    let ctx = document.getElementById("score");
+                    let scoreGraph = new Chart(ctx, {
+                      type: "line",
+                      data: {
+                        labels: scoreLabel,
+                        datasets: [{
+                          label: "スコアの推移",
+                          tension: 0,
+                          fill: false,
+                          borderColor: "red",
+                          borderWidth: 2,
+                          data: scoreData,
+                        }],
+                      },
+                      options: {
+                        responsive: true
+                      }
+                    })
+                  </script>
 
                   <!-- 詳細 -->
                   <div class="dark:text-white border rounded-xl col-start-1 shadow-lg col-span-2">

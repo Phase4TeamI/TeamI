@@ -19,4 +19,9 @@ class Score extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function repository()
+    {
+        return $this->belongsTo(Repository::class);
+    }
 }
