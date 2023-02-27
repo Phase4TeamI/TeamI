@@ -78,7 +78,13 @@ class RepositoryController extends Controller
         $result = Repository::create($request->all());
         // Issueの登録
         IssueCacher::storeIssue($response['id']);
+        // Pull Requestの登録
+        PullCacher::storePull($response['id']);
+        // Commitの登録        
+        CommitCacher::storeCommit($response['id']);
+
         return redirect()->route('repository.index');
+
     }
 
     /**
@@ -126,6 +132,7 @@ class RepositoryController extends Controller
                 $statePull["open"]++;
             }
         }
+        ddd($pullClosedAverage);
         $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
 
         //Commitの情報を計算
