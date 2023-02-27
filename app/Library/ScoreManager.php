@@ -41,7 +41,13 @@ class ScoreManager {
     }
 
     public static function calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged) {
-        return floor($issueClosedAverage / (($issueClosed + $commit) * $pullRequestMerged));
+        //0だと割れなくてエラーが出るので0を返す
+        if($pullRequestMerged == 0){
+            return 0;
+        }
+        else{
+            return floor($issueClosedAverage / (($issueClosed + $commit) * $pullRequestMerged));
+        }
     }
 
     //指定した年月の下記値を取得する
@@ -93,6 +99,7 @@ class ScoreManager {
         ->orderBy('id','asc')
         ->get()->count();
 
+        
         $score = ScoreManager::calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged);
 
         //今日のデータが既に格納されているかチェック

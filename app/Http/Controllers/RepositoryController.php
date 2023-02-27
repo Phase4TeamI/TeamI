@@ -130,7 +130,7 @@ class RepositoryController extends Controller
                 $statePull["open"]++;
             }
         }
-        ddd($pullClosedAverage);
+        // ddd($pullClosedAverage);
         $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
 
         //Commitの情報を計算
@@ -159,6 +159,7 @@ class RepositoryController extends Controller
         ->where('provider_id', Auth::user()->provider_id)
         ->get()->count();
 
+        
         ScoreManager::storeScore($id, Auth::user()->id, date("Y"), date("m"));
         $monthlyScore  = ScoreManager::getUserMonthlyScore($id, Auth::user()->id);
         $scores  = ScoreManager::getUserScores($id, Auth::user()->id);
