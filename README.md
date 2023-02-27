@@ -140,9 +140,18 @@ ProducTrack は、エンジニアの生産性を可視化するためのウェ�
 
 ## 使い方
 
--   `Continue with Github` からログイン
--
--
+1. ログイン  
+    `Continue with Github` からGitHubでログインします。  
+    
+2. リポジトリの登録  
+    `Register Repository` からリポジトリを登録します。  
+    リポジトリ名・リポジトリのURLをそれぞれ入力します。  
+
+3. Webhokの設定  
+    登録したリポジトリをGitHubで開きます。  
+    `ettings -> Webhooks -> Add webhook` からWebhookの設定を行います  
+    `Payload URL` に `アプリケーションURL/payload` を設定します。  
+    `Content type` を `application/json` へ変更します。  
 
 ## 今後の展望
 
