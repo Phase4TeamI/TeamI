@@ -159,7 +159,6 @@ class RepositoryController extends Controller
         ->where('provider_id', Auth::user()->provider_id)
         ->get()->count();
 
-        
         ScoreManager::storeScore($id, Auth::user()->id, date("Y"), date("m"));
         $monthlyScore  = ScoreManager::getUserMonthlyScore($id, Auth::user()->id);
         $scores  = ScoreManager::getUserScores($id, Auth::user()->id);
