@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Client\Factory;
 use Carbon\Carbon;
+use App\Library\IssueCacher;
+use App\Library\Compare;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
 class CompareController extends Controller
 {
     /**
@@ -16,7 +19,24 @@ class CompareController extends Controller
      */
     public function index()
     {
-        return view('compare.index');
+
+        $labels[] = array(
+            '20xx年', '20xx年'
+        );
+
+        $new_compare_issue_1[] = array(
+                'opened_issue'  => 0,
+                'closed_issue'  => 0,
+                'ave_closed' => 0
+            );
+        
+        $new_compare_2[] = array(
+            'issue' => 0,
+            'pull' => 0,
+            'commit' => 0
+        );
+
+        return view('compare.index', compact('labels', 'new_compare_issue_1','new_compare_2'));
     }
 
     /**
@@ -53,63 +73,33 @@ class CompareController extends Controller
         $firstOfMonth_2 = Carbon::create($year2, $month2, 1)->firstOfMonth();
         $lastOfMonth_2 = Carbon::create($year2, $month2, 1)->lastOfMonth();
 
+        //chart.jsに渡すためのlabelを作成
+        $labels[] = array(
+            $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
+        );
+
+        //比較1の年月だけ求める 例：2022-02
+        $data_1 = Compare::subDay($year1, $month1);
+
+        //全てのイシューを取得する
+        $OpenedIssues_1 = IssueCacher::getIssue(1);
+
+        //配列を用意して入力した年と月のopen issueを取得する
+        $new_OpenedIssues_1 = array();
+        $new_OpenedIssues_1 = Compare::getOpened($OpenedIssues_1, $data_1);
+
+        //クローズされたイシューを全件取得する
+        $ClosedIssues_1 = IssueCacher::getClosedIssue(1);
         
-        $client = new Factory();
-        //state=allにしているのでイシューとプルリク両方入って帰ってくる
-        $compare_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
-        $compare_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
-        
+        $new_ClosedIssues_1 = array();
+        $new_ClosedIssues_1 = Compare::getClosed($ClosedIssues_1, $data_1);
 
-        if ($compare_1 === NULL){
-            return;
-        }else {
+        //最終的に格納する配列
+        $new_compare_issue_1 = array();
+        $new_compare_issue_1 = Compare::averageCloseIssue($new_ClosedIssues_1, $new_OpenedIssues_1);
 
-            //イシューとプルリクを分ける作業
-            $compare_issue_1 = array();
-            $compare_pull_1 = array();
 
-            for($i = 0; $i <= count($compare_1)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_1[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_1[] = $compare_1[$i];
-                }
-                //issueの時はissueの配列に格納する
-                else{
-                    $compare_issue_1[] = $compare_1[$i];
-                }
-            }
-
-            $new_compare_1[] = array(
-                'issue'  => count($compare_issue_1),
-                'pull' => count($compare_pull_1)
-            );
-        }
-
-        if ($compare_2 === NULL){
-            return;
-        }else {
-
-            //イシューとプルリクを分ける作業
-            $compare_issue_2 = array();
-            $compare_pull_2 = array();
-
-            for($i = 0; $i <= count($compare_2)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_2[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_2[] = $compare_2[$i];
-                }
-                //issueの時はissueの配列に格納する
-                else{
-                    $compare_issue_2[] = $compare_2[$i];
-                }
-            }
-
-            $new_compare_2[] = array(
-                'issue'  => count($compare_issue_2),
-                'pull' => count($compare_pull_2)
-            );
-        }
-        return view('compare.index', compact('new_compare_1', 'new_compare_2'));
+        return view('compare.index', compact('labels','new_compare_issue_1'));
     }
 
     /**
