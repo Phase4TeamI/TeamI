@@ -245,7 +245,10 @@ class RepositoryController extends Controller
         $pull_achievement_1 = 0;
         $pull_achievement_2 = 0;
 
-        return view('compare.index', compact('id','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
+        $chart_1 = 0;
+        $chart_2 = 0;
+
+        return view('compare.index', compact('id','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
     }
 
     public function compare(Request $request, $id)
@@ -327,6 +330,10 @@ class RepositoryController extends Controller
         //最終的に格納する配列
         $new_compare_commits_1 = Compare::averageCommit($new_Commits_1, $firstOfMonth_1);
 
+        //チャートのデータを格納する配列
+        $chart_1 = Compare::weekCommit($new_Commits_1, $firstOfMonth_1);
+
+
 
         // -----------------------------------------------------------------------------------------------
         //比較2の処理
@@ -383,13 +390,16 @@ class RepositoryController extends Controller
         //最終的に格納する配列
         $new_compare_commits_2 = Compare::averageCommit($new_Commits_2, $firstOfMonth_2);
 
+        //チャートのデータを格納する配列
+        $chart_2 = Compare::weekCommit($new_Commits_2, $firstOfMonth_2);
+
         //達成度を求める
         $issue_achievement_1 = Compare::achievement(count($new_OpenedIssues_1), count($new_ClosedIssues_1));
         $issue_achievement_2 = Compare::achievement(count($new_OpenedIssues_2), count($new_ClosedIssues_2));
         $pull_achievement_1 = Compare::achievement(count($new_OpenedPulls_1), count($new_ClosedPulls_1));
         $pull_achievement_2 = Compare::achievement(count($new_OpenedPulls_2), count($new_ClosedPulls_2));
 
-        return view('compare.index', compact('id','labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
+        return view('compare.index', compact('id','labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
     }
 
     /**

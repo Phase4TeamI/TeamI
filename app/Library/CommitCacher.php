@@ -43,7 +43,7 @@ class CommitCacher {
     public static function getFullCommit($repository_id) {
         $commits = Commit::query()
         ->where('repository_id', $repository_id)
-        ->orderBy('id','asc')
+        ->orderBy('id','desc')
         ->get();
         
         return $commits;

@@ -1,4 +1,4 @@
-<x-app-layout>
+ｚ<x-app-layout>
   <div class="p-6 w-screen flex justify-center">
     <div class="w-screen max-w-[1500px] flex-col justify-center">
       <div class="m-4">
@@ -435,9 +435,20 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
+
+      <div class="w-full mt-4 p-4 rounded-xl shadow-md flex justify-between  border relative h-[360px]">
+        <div class="flex">
+          <div class="ml-8">
+            <canvas class ="h-80"id="myChart7"></canvas>
+          </div>
+          <div class="ml-28">
+            <canvas class ="h-80"id="myChart8"></canvas>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -463,6 +474,11 @@
       var ac_issue_2 = @json($issue_achievement_2);
       var ac_pull_1 = @json($pull_achievement_1);
       var ac_pull_2 = @json($pull_achievement_2);
+
+      //コミットチャート
+      var chart_1 = @json($chart_1);
+      var chart_2 = @json($chart_2);
+
 
       const myChart1 = new Chart(ctx1, {
       type: "bar",
@@ -577,6 +593,60 @@
       },   
       
     });
+
+    var ctx7 = document.getElementById('myChart7').getContext('2d');
+    const myChart7 = new Chart(ctx7, {
+    type: 'line', // グラフの種類をlineに変更
+    data: {
+          labels: chart_1["labels"], // 月のラベル用配列
+          datasets: [{
+            label: 'コミット数',
+            data: chart_1["data"], // データ用配列の値だけを配列にして使用
+            backgroundColor: 'rgba(34, 197, 94, 0.2)',
+            borderColor: 'rgba(34, 197, 94, 1)',
+            borderWidth: 1,
+          },],
+      },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              elements: {
+                  line: {
+                      tension: 0, // 折れ線の角度を直線にする
+                  }
+              }
+          }
+});
+
+    var ctx8 = document.getElementById('myChart8').getContext('2d');
+    const myChart8 = new Chart(ctx8, {
+    type: 'line', // グラフの種類をlineに変更
+    data: {
+          labels: chart_2["labels"], // 月のラベル用配列
+          datasets: [{
+            label: 'コミット数',
+            data: chart_2["data"], // データ用配列の値だけを配列にして使用
+            backgroundColor: 'rgba(34, 197, 94, 0.2)',
+            borderColor: 'rgba(34, 197, 94, 1)',
+            borderWidth: 1,
+          },],
+      },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              },
+              elements: {
+                  line: {
+                      tension: 0, // 折れ線の角度を直線にする
+                  }
+              }
+          }
+});
 
   </script>
 </x-app-layout>
