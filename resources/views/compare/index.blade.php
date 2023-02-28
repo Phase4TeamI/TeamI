@@ -102,14 +102,14 @@
               <div class="flex-cols space-y-3">
                 <div class="flex">
                   <svg class="h-6 w-6 pt-1 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r=".5" fill="currentColor" />  <circle cx="12" cy="12" r="9" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Issue
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にオープンしたイシュー</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にオープンしたイシュー</p>
                     @if(!isset($new_compare_issues_1[0]["opened"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -120,7 +120,7 @@
                   </div>
   
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にクローズしたイシュー</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にクローズしたイシュー</p>
                     @if(!isset($new_compare_issues_1[0]["closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -131,7 +131,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1issueあたりの平均クローズ時間</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1issueあたりの平均クローズ時間</p>
                     @if(!isset($new_compare_issues_1[0]["ave_closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -149,14 +149,14 @@
               <div class="flex-cols space-y-3">
                 <div class="flex">
                   <svg class="h-7 w-7  text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="4" />  <line x1="1.05" y1="12" x2="7" y2="12" />  <line x1="17.01" y1="12" x2="22.96" y2="12" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Commit
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中のコミット数</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中のコミット数</p>
                     @if(!isset($new_compare_commits_1[0]["commit"]))
                       <p class="font-mono text-3xl text-center font-bold text-green-500">0</p>
                       @else
@@ -167,7 +167,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1日あたりの平均コミット数</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1日あたりの平均コミット数</p>
                     @if(!isset($new_compare_commits_1[0]["ave_commit"]))
                       <p class="font-mono text-3xl text-center font-bold text-green-500">0</p>
                       @else
@@ -186,14 +186,14 @@
               <div class="flex-cols space-y-3 ">
                 <div class="flex">
                   <svg class="h-6 w-6  text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="6" cy="18" r="2" />  <circle cx="6" cy="6" r="2" />  <circle cx="18" cy="18" r="2" />  <line x1="6" y1="8" x2="6" y2="16" />  <path d="M11 6h5a2 2 0 0 1 2 2v8" />  <polyline points="14 9 11 6 14 3" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Pull Request
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にオープンしたプルリクエスト</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にオープンしたプルリクエスト</p>
                     @if(!isset($new_compare_pulls_1[0]["opened"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -204,7 +204,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にクローズしたプルリクエスト</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にクローズしたプルリクエスト</p>
                     @if(!isset($new_compare_pulls_1[0]["closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -215,7 +215,7 @@
                   </div>
   
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1プルリクエストあたりの平均マージ・均クローズ時間</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1プルリクエストあたりの平均マージ・均クローズ時間</p>
                     @if(!isset($new_compare_pulls_1[0]["ave_closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -238,14 +238,14 @@
               <div class="flex-cols space-y-3">
                 <div class="flex">
                   <svg class="h-6 w-6 pt-1 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r=".5" fill="currentColor" />  <circle cx="12" cy="12" r="9" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Issue
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にオープンしたイシュー</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にオープンしたイシュー</p>
                     @if(!isset($new_compare_issues_2[0]["opened"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -256,7 +256,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にクローズしたイシュー</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にクローズしたイシュー</p>
                     @if(!isset($new_compare_issues_2[0]["closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -267,7 +267,7 @@
                   </div>
   
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1issueあたりの平均クローズ時間</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1issueあたりの平均クローズ時間</p>
                     @if(!isset($new_compare_issues_2[0]["ave_closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-blue-600">0</p>
                       @else
@@ -285,14 +285,14 @@
               <div class="flex-cols space-y-3">
                 <div class="flex">
                   <svg class="h-7 w-7  text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="4" />  <line x1="1.05" y1="12" x2="7" y2="12" />  <line x1="17.01" y1="12" x2="22.96" y2="12" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Commit
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中のコミット数</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中のコミット数</p>
                     @if(!isset($new_compare_commits_2[0]["commit"]))
                       <p class="font-mono text-3xl text-center font-bold text-green-500">0</p>
                       @else
@@ -303,7 +303,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1日あたりの平均コミット数</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1日あたりの平均コミット数</p>
                     @if(!isset($new_compare_commits_2[0]["ave_commit"]))
                       <p class="font-mono text-3xl text-center font-bold text-green-500">0</p>
                       @else
@@ -322,14 +322,14 @@
               <div class="flex-cols space-y-3">
                 <div class="flex">
                   <svg class="h-6 w-6  text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="6" cy="18" r="2" />  <circle cx="6" cy="6" r="2" />  <circle cx="18" cy="18" r="2" />  <line x1="6" y1="8" x2="6" y2="16" />  <path d="M11 6h5a2 2 0 0 1 2 2v8" />  <polyline points="14 9 11 6 14 3" /></svg>
-                    <p class="font-mono text-lg font-bold ml-2">
+                    <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                       Pull Request
                     </p>  
                 </div>
 
                 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にオープンしたプルリク</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にオープンしたプルリク</p>
                     @if(!isset($new_compare_pulls_2[0]["opened"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -340,7 +340,7 @@
                   </div>
 
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">期間中にクローズしたプルリク</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">期間中にクローズしたプルリク</p>
                     @if(!isset($new_compare_pulls_2[0]["closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -351,7 +351,7 @@
                   </div>
   
                   <div class="flex justify-between">
-                    <p class="text-[12px] pl-1 pt-2">1プルリクあたりの平均マージ・均クローズ時間</p>
+                    <p class="text-[12px] pl-1 pt-2 dark:text-white">1プルリクあたりの平均マージ・均クローズ時間</p>
                     @if(!isset($new_compare_pulls_2[0]["ave_closed"]))
                       <p class="font-mono text-3xl text-center font-bold text-orange-500">0</p>
                       @else
@@ -374,7 +374,7 @@
             <div class="flex items-center">
               <svg class="h-6 w-6 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" />  <path d="M9 12l2 2l4 -4" /></svg>
             </div>
-            <p class="font-mono text-lg font-bold ml-2">
+            <p class="font-mono text-lg font-bold ml-2 dark:text-white">
               Opened
             </p>  
           </div>
@@ -389,7 +389,7 @@
             <div class="flex items-center">
               <svg class="h-6 w-6 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="12" cy="12" r="9" />  <path d="M10 10l4 4m0 -4l-4 4" /></svg>
             </div>
-            <p class="font-mono text-lg font-bold ml-2">
+            <p class="font-mono text-lg font-bold ml-2 dark:text-white">
               Closed
             </p>  
           </div>
@@ -407,30 +407,30 @@
               <div class="">
                 <svg class="h-6 w-6 mt-1 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="3 17 9 11 13 15 21 7" />  <polyline points="14 7 21 7 21 14" /></svg> 
               </div>
-              <p class="font-mono text-lg font-bold ml-2">
+              <p class="font-mono text-lg font-bold ml-2 dark:text-white">
                 achievement
               </p>  
           </div>
         
           <div class="flex">
             <div class=" relative ml-8">
-              <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2">{{$issue_achievement_1}}%</span>
+              <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2 dark:text-white">{{$issue_achievement_1}}%</span>
               <canvas class =""id="myChart3"></canvas>
             </div>
 
             <div class="relative ml-8">
-              <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2">{{$issue_achievement_2}}%</span>
+              <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2 dark:text-white">{{$issue_achievement_2}}%</span>
               <canvas class =""id="myChart4"></canvas>
             </div>
 
             <div class="flex ml-36">
               <div class="relative">
-                <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2">{{$pull_achievement_1}}%</span>
+                <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2 dark:text-white">{{$pull_achievement_1}}%</span>
                 <canvas class =""id="myChart5"></canvas>
               </div>
 
               <div class="relative ml-8">
-                <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2">{{$pull_achievement_2}}%</span>
+                <span class="absolute  text-4xl top-1/2 left-1/2 -translate-y-1 -translate-x-1/2 dark:text-white">{{$pull_achievement_2}}%</span>
                 <canvas class =""id="myChart6"></canvas>
               </div>
             </div>
