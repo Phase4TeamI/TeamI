@@ -105,6 +105,7 @@ class CompareController extends Controller
         $labels[] = array(
             $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
         );
+        
 
         //比較1の処理
 

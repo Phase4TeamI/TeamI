@@ -42,7 +42,7 @@ class ScoreManager {
 
     public static function calcScore($issueClosed, $issueClosedAverage, $commit, $pullRequestMerged) {
         //0だと割れなくてエラーが出るので0を返す
-        if($pullRequestMerged == 0){
+        if((($issueClosed + $commit) * $pullRequestMerged) == 0){
             return 0;
         }
         else{
@@ -87,7 +87,7 @@ class ScoreManager {
             $calcAverage[] = strtotime($issue["closed_at"]) - strtotime($issue["created_at"]);
         }
         //0で割ったときに出るエラーを回避
-        if( count($calcAverage) === 0){
+        if( count($calcAverage) == 0){
             $issueClosedAverage = 0;
         }
         else{

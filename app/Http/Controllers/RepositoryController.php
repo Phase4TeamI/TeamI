@@ -68,17 +68,19 @@ class RepositoryController extends Controller
 
         //APIにリポジトリを問い合わせ
         $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $request->input("repository_url"));
-
+        
         $response = WebRequestSender::getResponse($api_uri);
         if (!isset($response)) {
             return redirect()->route('repository.create')->withInput();
         }
+
 
         // DBに格納
         // リポジトリの登録
         $request->merge(['user_id' => Auth::user()->id]);
         $request->merge(['repository_id' => $response["id"]]);
         $result = Repository::create($request->all());
+        
         // Issueの登録
         IssueCacher::storeIssue($response['id']);
         PullCacher::storePull($response['id']);
@@ -270,6 +272,7 @@ class RepositoryController extends Controller
         $labels[] = array(
             $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
         );
+        // ddd($labels);
 
         //比較1の処理
 

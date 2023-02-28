@@ -166,6 +166,16 @@ class Compare {
         return $achievement;
     }
 
+    /*  
+     *  概要  issueやプルリクエストの達成率を計算する
+     *  引数  integer オープン配列 integer クローズ配列
+     *  返値  double  クローズをオープンで割った達成率
+     */ 
+    public static function weekCommit($open, $close){
+
+        
+    }
+
 
     
 }
