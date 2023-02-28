@@ -115,7 +115,13 @@ class RepositoryController extends Controller
                 $stateIssue["open"]++;
             }
         }
-        $stateIssue["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($issueClosedAverage) / count($issueClosedAverage)));
+        //0で割ったときに出るエラーを回避
+        if(count($issueClosedAverage) === 0){
+            $stateIssue["average"] = 0;
+        }
+        else{
+            $stateIssue["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($issueClosedAverage) / count($issueClosedAverage)));
+        }
 
         //Pullの情報を計算
         $statePull = array(
@@ -132,8 +138,14 @@ class RepositoryController extends Controller
                 $statePull["open"]++;
             }
         }
-        // ddd($pullClosedAverage);
-        $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
+        //0で割ったときに出るエラーを回避
+        if( count($pullClosedAverage) === 0){
+            $statePull["average"] = 0;
+        }
+        else{
+            $statePull["average"] = TimeExchanger::convertSecToHMS(floor(array_sum($pullClosedAverage) / count($pullClosedAverage)));
+        }
+        
 
         //Commitの情報を計算
         $stateCommit = array(
@@ -155,7 +167,14 @@ class RepositoryController extends Controller
                 $averageCommit[] = $dayCommit["commit"];
             }
         }
-        $stateCommit["average"] = floor(array_sum($averageCommit) / count($averageCommit));
+        //0で割ったときに出るエラーを回避
+        if( count($averageCommit) === 0){
+            $stateCommit["average"]= 0;
+        }
+        else{
+            $stateCommit["average"] = floor(array_sum($averageCommit) / count($averageCommit));
+        }
+        
         $stateCommit["commit"] = Commit::Query()
         ->where('repository_id', $id)
         ->where('provider_id', Auth::user()->provider_id)
