@@ -20,8 +20,10 @@ class PullCacher {
      *  返値  Array  レスポンス
      */ 
     public static function getPullFromRemote($repository_url) {
-        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/pulls?state=all&per_page=100";
+        $api_uri = "https://api.github.com/repos/" . str_replace("https://github.com/", "", $repository_url) . "/pulls?state=all&per_page=100&page=1";
+        
         $response = WebRequestSender::getResponse($api_uri);
+
 
         if (!isset($response)) {
             return [];

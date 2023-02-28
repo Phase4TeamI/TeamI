@@ -166,6 +166,57 @@ class Compare {
         return $achievement;
     }
 
+    /*  
+     *  概要  issueやプルリクエストの達成率を計算する
+     *  引数  integer オープン配列 integer クローズ配列
+     *  返値  double  クローズをオープンで割った達成率
+     */ 
+    public static function weekCommit($new_Commits){
+
+        
+        $commitsByDay = collect($new_Commits)->groupBy(function ($new_Commits) {
+            return Carbon::parse($new_Commits->committed_at)->format('Y-m-d');
+        });
+
+        $commitsPerDay = $commitsByDay->map(function ($new_Commits, $date) {
+        return [
+            'date' => $date,
+            'count' => $new_Commits->count(),
+        ];
+        })->values();
+
+        $labels = []; // 月のラベル用配列
+        $data = []; // データ用配列
+        
+        foreach ($commitsPerDay as $day) {
+            $labels[] = $day["date"];
+            $data[] = $day["count"]; // データ用配列の月の値にコミット数を加算
+        }
+
+        
+        
+        // $chartData = [
+        //     'labels' => $labels, // 月のラベル用配列
+        //     'datasets' => [
+        //         [
+        //             'label' => 'コミット数',
+        //             'data' => $data, // データ用配列の値だけを配列にして使用
+        //             'backgroundColor' => 'rgba(255, 99, 132, 0.2)',
+        //             'borderColor' => 'rgba(255, 99, 132, 1)',
+        //             'borderWidth' => 1,
+        //         ]
+        //     ]
+        // ];
+
+        $chartData = array(
+            'labels' => $labels,
+            'data'   => $data
+        );
+
+
+        return $chartData;
+    }
+
 
     
 }

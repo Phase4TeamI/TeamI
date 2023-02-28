@@ -13,6 +13,7 @@ use App\Library\CommitCacher;
 use App\Library\Compare;
 
 use App\Models\User;
+use App\Models\Repository;
 
 class CompareController extends Controller
 {
@@ -83,6 +84,7 @@ class CompareController extends Controller
      */
     public function store(Request $request)
     {
+        
         // 比較1
         $year1 = $request->input('year1');
         $month1 = $request->input('month1');
@@ -103,6 +105,7 @@ class CompareController extends Controller
         $labels[] = array(
             $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
         );
+        
 
         //比較1の処理
 
@@ -222,7 +225,7 @@ class CompareController extends Controller
         return view('compare.index', compact('labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
     }
 
-    /**
+
      * Display the specified resource.
      *
      * @param  int  $id
@@ -230,7 +233,50 @@ class CompareController extends Controller
      */
     public function show($id)
     {
-        //
+        $labels[] = array(
+            '20xx年', '20xx年'
+        );
+
+        $new_compare_issues_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_1[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        $new_compare_issues_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_2[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        $issue_achievement_1 = 0;
+        $issue_achievement_2 = 0;
+        $pull_achievement_1 = 0;
+        $pull_achievement_2 = 0;
+
+        return view('compare.index', compact('id','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
     }
 
     /**
