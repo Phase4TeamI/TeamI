@@ -1,4 +1,4 @@
-ｚ<x-app-layout>
+<x-app-layout>
   <div class="p-6 w-screen flex justify-center">
     <div class="w-screen max-w-[1500px] flex-col justify-center">
       <div class="m-4">
