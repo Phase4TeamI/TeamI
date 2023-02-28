@@ -2,21 +2,94 @@
   <div class="p-6 w-screen flex justify-center">
     <div class="w-screen max-w-[1500px] flex-col justify-center">
       <div class="m-4">
-        <form class = "flex justify-between" action="{{ route('compare.store2', $id)}}" method="post">
+        <form class = "flex justify-evenly" action="{{ route('repository.compare', $id)}}" method="post">
             @csrf
-            <label for="year1">年1：</label>
-            <input class = "h-8" type="text" name="year1" id="year1">
-            <label for="month1">月1：</label>
-            <input class = "h-8" type="text" name="month1" id="month1">
 
-            <button type="submit" class="font-medium tracking-widest uppercase">
-            比較する
+            <div>
+              <select class="w-40 border rounded-md py-2 px-3 text-gray-800 outline-none" name="year1" id="year1">
+                <option value="2008">2008年</option>
+                <option value="2009">2009年</option>
+                <option value="2010">2010年</option>
+                <option value="2011">2011年</option>
+                <option value="2012">2012年</option>
+                <option value="2013">2013年</option>
+                <option value="2014">2014年</option>
+                <option value="2015">2015年</option>
+                <option value="2016">2016年</option>
+                <option value="2017">2017年</option>
+                <option value="2018">2018年</option>
+                <option value="2019">2019年</option>
+                <option value="2020">2020年</option>
+                <option value="2021">2021年</option>
+                <option value="2022">2022年</option>
+                <option value="2023">2023年</option>
+              </select>
+
+              <select class="w-40 border rounded-md py-2 px-3 text-gray-800 outline-none" name="month1" id="month1">
+                <option value="1">1月</option>
+                <option value="2">2月</option>
+                <option value="3">3月</option>
+                <option value="4">4月</option>
+                <option value="5">5月</option>
+                <option value="6">6月</option>
+                <option value="7">7月</option>
+                <option value="8">8月</option>
+                <option value="9">9月</option>
+                <option value="10">10月</option>
+                <option value="11">11月</option>
+                <option value="12">12月</option>
+              </select>
+            </div>
+            
+
+            
+            <button type="submit">
+            <div class="w-32 flex justify-center items-center px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transiton duration-200">
+              <div class="flex items-center">
+                <svg class="h-4 w-4 mr-1 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="6" cy="6" r="2" />  <circle cx="18" cy="18" r="2" />  <path d="M11 6h5a2 2 0 0 1 2 2v8" />  <polyline points="14 9 11 6 14 3" />  <path d="M13 18h-5a2 2 0 0 1 -2 -2v-8" />  <polyline points="10 15 13 18 10 21" /></svg>
+              </div>
+
+                <p  class="font-medium text-white">Compare</p>
+
+            </div>
             </button>
 
-            <label for="year2">年2：</label>
-            <input class = "h-8" type="text" name="year2" id="year2">
-            <label for="month2">月2：</label>
-            <input class = "h-8" type="text" name="month2" id="month2">
+            <div>
+              <select class="w-40 border rounded-md py-2 px-3 text-gray-800 outline-none" name="year2" id="year2">
+                <option value="2008">2008年</option>
+                <option value="2009">2009年</option>
+                <option value="2010">2010年</option>
+                <option value="2011">2011年</option>
+                <option value="2012">2012年</option>
+                <option value="2013">2013年</option>
+                <option value="2014">2014年</option>
+                <option value="2015">2015年</option>
+                <option value="2016">2016年</option>
+                <option value="2017">2017年</option>
+                <option value="2018">2018年</option>
+                <option value="2019">2019年</option>
+                <option value="2020">2020年</option>
+                <option value="2021">2021年</option>
+                <option value="2022">2022年</option>
+                <option value="2023">2023年</option>
+              </select>
+
+              <select class="w-40 border rounded-md py-2 px-3 text-gray-800 outline-none" name="month2" id="month2">
+                <option value="1">1月</option>
+                <option value="2">2月</option>
+                <option value="3">3月</option>
+                <option value="4">4月</option>
+                <option value="5">5月</option>
+                <option value="6">6月</option>
+                <option value="7">7月</option>
+                <option value="8">8月</option>
+                <option value="9">9月</option>
+                <option value="10">10月</option>
+                <option value="11">11月</option>
+                <option value="12">12月</option>
+              </select>
+            </div>
+            
         </form>
       </div>
 

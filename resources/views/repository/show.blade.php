@@ -51,8 +51,17 @@
                   <!-- 詳細 -->
                   <div class="dark:text-white border rounded-xl col-start-1 shadow-lg col-span-2">
                     <div class="w-full px-3 py-7 rounded-xl">
-                      <h3 class="font-mono text-2xl">DETAILS</h3>
-
+                      <div class="flex justify-between">
+                        <h3 class="font-mono text-2xl">DETAILS</h3>
+                        <div class="flex items-center px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-400 transiton duration-200">
+                          <a href="{{ route('repository.indexCompare',$repository->id) }}" class="flex text-white">
+                          <div class="flex items-center">
+                            <svg class="h-4 w-4 mr-1 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <circle cx="6" cy="6" r="2" />  <circle cx="18" cy="18" r="2" />  <path d="M11 6h5a2 2 0 0 1 2 2v8" />  <polyline points="14 9 11 6 14 3" />  <path d="M13 18h-5a2 2 0 0 1 -2 -2v-8" />  <polyline points="10 15 13 18 10 21" /></svg>
+                          </div>
+                          Compare
+                          </a>
+                        </div>
+                      </div>
                       <!-- issue情報 -->
                       <div class="flex mt-5 items-center justify-between ac-parent">
                         <div class="flex items-center ">
@@ -136,7 +145,7 @@
         </div>
     </div>
 
-  <a href="{{ route('compare.show',$repository->id) }}">kotira</a>
+  
 
     @if ($repository->user_id === Auth::user()->id)
         <div class="pt-6">
