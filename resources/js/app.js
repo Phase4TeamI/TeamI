@@ -10,3 +10,4 @@ Alpine.start();
 
 import jQuery from 'jquery';
 window.$ = jQuery;
+import "./chartjs";

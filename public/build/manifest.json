@@ -1,0 +1,37 @@
+{
+  "_preline-9be8d0b4.js": {
+    "file": "assets/preline-9be8d0b4.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-d9ce6a3c.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/css/index.css": {
+    "file": "assets/index-902a9bd6.css",
+    "isEntry": true,
+    "src": "resources/css/index.css"
+  },
+  "resources/js/app.js": {
+    "dynamicImports": [
+      "_preline-9be8d0b4.js"
+    ],
+    "file": "assets/app-653b13be.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/chartjs.js": {
+    "file": "assets/chartjs-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/js/chartjs.js"
+  },
+  "resources/js/index.js": {
+    "file": "assets/index-6df771fa.js",
+    "isEntry": true,
+    "src": "resources/js/index.js"
+  }
+}

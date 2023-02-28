@@ -43,12 +43,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('repository', RepositoryController::class);
     Route::post('repository/{repository}/adduser', [RepositoryController::class, 'addUser'])->name('repository.adduser');
+    Route::get('repository/{repository}/comapre', [RepositoryController::class, 'indexCompare'])->name('repository.indexCompare');
+    Route::post('repository/{repository}/comapre', [RepositoryController::class, 'compare'])->name('repository.compare');
     
     Route::resource('issue', IssueController::class);
     Route::resource('scoreboard', ScoreboardController::class);
-
-    Route::resource('compare', CompareController::class);
-
 });
 
 require __DIR__.'/auth.php';

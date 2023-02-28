@@ -5,39 +5,19 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="pr-8 shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <div class="pr-8 border-white rounded-lg text-white">ProducTrack</div>
+                    <a href="{{ route('repository.index') }}">
+                        <div class="pr-8 border-white rounded-lg text-black dark:text-white">ProducTrack</div>
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-
-
-                <!-- Issue Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('issue.index')" :active="request()->routeIs('issue.index')">
-                        {{ __('Issue List') }}
-                    </x-nav-link>
-                </div>
-
-                <!-- Scoreboard Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('scoreboard.index')" :active="request()->routeIs('scoreboard.index')">
-                        {{ __('Scoreboard') }}
-                    </x-nav-link>
-                </div>
-                
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('repository.index')" :active="request()->routeIs('repository.index')">
                         {{ __('Repository') }}
 
                     </x-nav-link>
                 </div>
+
+                
             </div>
 
             <!-- Settings Dropdown -->
@@ -58,7 +38,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <a href="https://github.com/{{ Auth::user()->name }}" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
+                        <a href="https://github.com/{{ Auth::user()->name }}" target="_blank" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
                             {{ __('Profile') }}
                         </a>
 
@@ -104,7 +84,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <a href="https://github.com/{{ Auth::user()->name }}" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
+                <a href="https://github.com/{{ Auth::user()->name }}" target="_blank" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out">
                     {{ __('Profile') }}
                 </a>
 

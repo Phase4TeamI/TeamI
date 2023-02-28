@@ -16,6 +16,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "chart.js": "^4.2.1",
         "jquery": "^3.6.3",
         "preline": "^1.7.0"
     }

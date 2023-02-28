@@ -13,7 +13,9 @@
                   </div>
 
                   <!-- グラフ -->
-                  <div class="dark:text-white flex items-center justify-center px-3 py-7 row-span-2 col-start-3 col-span-3 text-center shadow-lg border rounded-xl">グラフがきます</div>
+                  <div class="dark:text-white flex items-center justify-center px-3 py-7 row-span-2 col-start-3 col-span-3 text-center shadow-lg border rounded-xl">
+                    <canvas id="myChart"></canvas>
+                  </div>
 
                   <!-- 詳細 -->
                   <div class="dark:text-white border rounded-xl col-start-1 shadow-lg col-span-2">

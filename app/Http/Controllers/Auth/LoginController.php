@@ -35,6 +35,6 @@ class LoginController extends Controller
 
         Auth::login($existingUser, true);
 
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/repository');
     }
 }

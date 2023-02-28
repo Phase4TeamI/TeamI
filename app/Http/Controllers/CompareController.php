@@ -1,11 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Http\Client\Factory;
+use GuzzleHttp\Client;
+
 use Carbon\Carbon;
 
-use Illuminate\Http\Request;
+use App\Library\IssueCacher;
+use App\Library\PullCacher;
+use App\Library\CommitCacher;
+use App\Library\Compare;
+
+use App\Models\User;
+use App\Models\Repository;
 
 class CompareController extends Controller
 {
@@ -16,7 +24,46 @@ class CompareController extends Controller
      */
     public function index()
     {
-        return view('compare.index');
+
+        $labels[] = array(
+            '20xx年', '20xx年'
+        );
+
+        $new_compare_issues_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_1[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        $new_compare_issues_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_2[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        return view('compare.index', compact('labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2'));
     }
 
     /**
@@ -37,6 +84,7 @@ class CompareController extends Controller
      */
     public function store(Request $request)
     {
+        
         // 比較1
         $year1 = $request->input('year1');
         $month1 = $request->input('month1');
@@ -53,66 +101,131 @@ class CompareController extends Controller
         $firstOfMonth_2 = Carbon::create($year2, $month2, 1)->firstOfMonth();
         $lastOfMonth_2 = Carbon::create($year2, $month2, 1)->lastOfMonth();
 
+        //chart.jsに渡すためのlabelを作成
+        $labels[] = array(
+            $year1.'年'.$month1.'月', $year2.'年'.$month2.'月'
+        );
         
-        $client = new Factory();
-        //state=allにしているのでイシューとプルリク両方入って帰ってくる
-        $compare_1 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_1.'&until='.$lastOfMonth_1)->json();
-        $compare_2 = $client->withToken(env('GITHUB_TOKEN'))->get('https://api.github.com/repos/anti-15/fronavi/issues?state=all&per_page=100&sort=updated&direction=desc&since='.$firstOfMonth_2.'&until='.$lastOfMonth_2)->json();
+
+        //比較1の処理
+
+        //比較1の年月だけ求める 例：2022-02
+        $data_1 = Compare::subDay($year1, $month1);
+
+        //全てのイシューを取得する
+        $OpenedIssues_1 = IssueCacher::getIssue(1);
+
+        //配列を用意して入力した年と月のopen issueを取得する
+        $new_OpenedIssues_1 = array();
+        $new_OpenedIssues_1 = Compare::getOpened($OpenedIssues_1, $data_1);
+
+        //クローズされたイシューを全件取得する
+        $ClosedIssues_1 = IssueCacher::getClosedIssue(1);
+        
+        $new_ClosedIssues_1 = array();
+        $new_ClosedIssues_1 = Compare::getClosed($ClosedIssues_1, $data_1);
+
+        //最終的に格納する配列
+        $new_compare_issues_1 = array();
+        $new_compare_issues_1 = Compare::averageClose($new_ClosedIssues_1, $new_OpenedIssues_1);
+
+        // -----------------------
+
+        //全てのプルリクを取得する
+        $OpenedPulls_1 = PullCacher::getPull(1);
+
+        //配列を用意して入力した年と月のopen プルリクを取得する
+        $new_OpenedPulls_1 = array();
+        $new_OpenedPulls_1 = Compare::getOpened($OpenedPulls_1, $data_1);
+        
+        //クローズされたプルリクを全件取得する
+        $ClosedPulls_1 = PullCacher::getClosedPull(1);
+        
+        //期間中にクローズされたプルリクを取得する
+        $new_ClosedPulls_1 = array();
+        $new_ClosedPulls_1 = Compare::getClosed($ClosedPulls_1, $data_1);
+        
+        //最終的に格納する配列
+        $new_compare_pulls_1 = array();
+        $new_compare_pulls_1 = Compare::averageClose($new_ClosedPulls_1, $new_OpenedPulls_1);
+
+        // -----------------------
+
+        // 全てのコミットを取得する
+        $FullCommits_1 = CommitCacher::getFullCommit(1);
+        
+        //期間中のコミットを取得
+        $new_Commits_1 = Compare::getCommit($FullCommits_1, $data_1);
+        
+        //最終的に格納する配列
+        $new_compare_commits_1 = Compare::averageCommit($new_Commits_1, $firstOfMonth_1);
+
+
+        // -----------------------------------------------------------------------------------------------
+        //比較2の処理
+
+        //比較2の年月だけ求める 例：2022-02
+        $data_2 = Compare::subDay($year2, $month2);
+
+        //全てのイシューを取得する
+        $OpenedIssues_2 = IssueCacher::getIssue(1);
+
+        //配列を用意して入力した年と月のopen issueを取得する
+        $new_OpenedIssues_2 = array();
+        $new_OpenedIssues_2 = Compare::getOpened($OpenedIssues_2, $data_2);
+
+        //クローズされたイシューを全件取得する
+        $ClosedIssues_2 = IssueCacher::getClosedIssue(1);
+        
+        $new_ClosedIssues_2 = array();
+        $new_ClosedIssues_2 = Compare::getClosed($ClosedIssues_2, $data_2);
+
+        //最終的に格納する配列
+        $new_compare_issues_2 = array();
+        $new_compare_issues_2 = Compare::averageClose($new_ClosedIssues_2, $new_OpenedIssues_2);
+
+        // -----------------------
+
+        //全てのプルリクを取得する
+        $OpenedPulls_2 = PullCacher::getPull(1);
+
+        //配列を用意して入力した年と月のopen プルリクを取得する
+        $new_OpenedPulls_2 = array();
+        $new_OpenedPulls_2 = Compare::getOpened($OpenedPulls_2, $data_2);
+        
+        //クローズされたプルリクを全件取得する
+        $ClosedPulls_2 = PullCacher::getClosedPull(1);
+        
+        //期間中にクローズされたプルリクを取得する
+        $new_ClosedPulls_2 = array();
+        $new_ClosedPulls_2 = Compare::getClosed($ClosedPulls_2, $data_2);
         
 
-        if ($compare_1 === NULL){
-            return;
-        }else {
+        //最終的に格納する配列
+        $new_compare_pulls_2 = array();
+        $new_compare_pulls_2 = Compare::averageClose($new_ClosedPulls_2, $new_OpenedPulls_2);
 
-            //イシューとプルリクを分ける作業
-            $compare_issue_1 = array();
-            $compare_pull_1 = array();
+        // -----------------------
 
-            for($i = 0; $i <= count($compare_1)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_1[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_1[] = $compare_1[$i];
-                }
-                //issueの時はissueの配列に格納する
-                else{
-                    $compare_issue_1[] = $compare_1[$i];
-                }
-            }
+        // 全てのコミットを取得する
+        $FullCommits_2 = CommitCacher::getFullCommit(1);
+        
+        //期間中のコミットを取得
+        $new_Commits_2 = Compare::getCommit($FullCommits_2, $data_2);
+        
+        //最終的に格納する配列
+        $new_compare_commits_2 = Compare::averageCommit($new_Commits_2, $firstOfMonth_2);
 
-            $new_compare_1[] = array(
-                'issue'  => count($compare_issue_1),
-                'pull' => count($compare_pull_1)
-            );
-        }
+        //達成度を求める
+        $issue_achievement_1 = Compare::achievement(count($new_OpenedIssues_1), count($new_ClosedIssues_1));
+        $issue_achievement_2 = Compare::achievement(count($new_OpenedIssues_2), count($new_ClosedIssues_2));
+        $pull_achievement_1 = Compare::achievement(count($new_OpenedPulls_1), count($new_ClosedPulls_1));
+        $pull_achievement_2 = Compare::achievement(count($new_OpenedPulls_2), count($new_ClosedPulls_2));
 
-        if ($compare_2 === NULL){
-            return;
-        }else {
-
-            //イシューとプルリクを分ける作業
-            $compare_issue_2 = array();
-            $compare_pull_2 = array();
-
-            for($i = 0; $i <= count($compare_2)-1; $i++){
-                //pullが含まれる場合はpullの配列に格納する。
-                if(strpos($compare_2[$i]["html_url"], 'https://github.com/anti-15/Fronavi/pull') !== false){
-                    $compare_pull_2[] = $compare_2[$i];
-                }
-                //issueの時はissueの配列に格納する
-                else{
-                    $compare_issue_2[] = $compare_2[$i];
-                }
-            }
-
-            $new_compare_2[] = array(
-                'issue'  => count($compare_issue_2),
-                'pull' => count($compare_pull_2)
-            );
-        }
-        return view('compare.index', compact('new_compare_1', 'new_compare_2'));
+        return view('compare.index', compact('labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
     }
 
-    /**
+
      * Display the specified resource.
      *
      * @param  int  $id
@@ -120,7 +233,50 @@ class CompareController extends Controller
      */
     public function show($id)
     {
-        //
+        $labels[] = array(
+            '20xx年', '20xx年'
+        );
+
+        $new_compare_issues_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_1[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_1[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        $new_compare_issues_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+        
+        $new_compare_pulls_2[] = array(
+            'opened'  => 0,
+            'closed'  => 0,
+            'ave_closed' => 0
+        );
+
+        $new_compare_commits_2[] = array(
+            'commit'  => 0,
+            'ave_commit'  => 0
+        );
+
+        $issue_achievement_1 = 0;
+        $issue_achievement_2 = 0;
+        $pull_achievement_1 = 0;
+        $pull_achievement_2 = 0;
+
+        return view('compare.index', compact('id','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2'));
     }
 
     /**
