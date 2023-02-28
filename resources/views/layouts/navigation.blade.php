@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="pr-8 shrink-0 flex items-center">
                     <a href="{{ route('repository.index') }}">
-                        <div class="pr-8 border-white rounded-lg text-white">ProducTrack</div>
+                        <div class="pr-8 border-white rounded-lg text-black dark:text-white">ProducTrack</div>
                     </a>
                 </div>
 
