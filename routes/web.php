@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('repository', RepositoryController::class);
     Route::post('repository/{repository}/adduser', [RepositoryController::class, 'addUser'])->name('repository.adduser');
+    Route::post('compare/{compare}', [CompareController::class, 'store2'])->name('compare.store2');
     
     Route::resource('issue', IssueController::class);
     Route::resource('scoreboard', ScoreboardController::class);

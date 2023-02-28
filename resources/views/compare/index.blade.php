@@ -2,7 +2,7 @@
   <div class="p-6 w-screen flex justify-center">
     <div class="w-screen max-w-[1500px] flex-col justify-center">
       <div class="m-4">
-        <form class = "flex justify-between" action="{{ route('compare.store') }}" method="post">
+        <form class = "flex justify-between" action="{{ route('compare.store2', $id)}}" method="post">
             @csrf
             <label for="year1">年1：</label>
             <input class = "h-8" type="text" name="year1" id="year1">

@@ -136,6 +136,8 @@
         </div>
     </div>
 
+  <a href="{{ route('compare.show',$repository->id) }}">kotira</a>
+
     @if ($repository->user_id === Auth::user()->id)
         <div class="pt-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
