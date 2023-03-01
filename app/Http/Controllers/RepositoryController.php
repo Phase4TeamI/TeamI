@@ -202,6 +202,7 @@ class RepositoryController extends Controller
 
     public function indexCompare($id)
     {
+        $repository = Repository::find($id);
         $labels[] = array(
             '20xx年', '20xx年'
         );
@@ -248,7 +249,7 @@ class RepositoryController extends Controller
         $chart_1 = 0;
         $chart_2 = 0;
 
-        return view('compare.index', compact('id','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
+        return view('compare.index', compact('id','repository','labels', 'new_compare_issues_1','new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2','new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
     }
 
     public function compare(Request $request, $id)
@@ -399,7 +400,7 @@ class RepositoryController extends Controller
         $pull_achievement_1 = Compare::achievement(count($new_OpenedPulls_1), count($new_ClosedPulls_1));
         $pull_achievement_2 = Compare::achievement(count($new_OpenedPulls_2), count($new_ClosedPulls_2));
 
-        return view('compare.index', compact('id','labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
+        return view('compare.index', compact('id','repository','labels','new_compare_issues_1', 'new_compare_pulls_1', 'new_compare_commits_1', 'new_compare_issues_2', 'new_compare_pulls_2', 'new_compare_commits_2', 'issue_achievement_1', 'issue_achievement_2', 'pull_achievement_1', 'pull_achievement_2', 'chart_1', 'chart_2'));
     }
 
     /**
