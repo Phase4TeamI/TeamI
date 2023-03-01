@@ -2,6 +2,12 @@
   <div class="p-6 w-screen flex justify-center">
     <div class="w-screen max-w-[1500px] flex-col justify-center">
       <div class="m-4">
+        <div class="flex">
+          <svg class="h-10 w-10 mb-4 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 19c-4.286 1.35-4.286-2.55-6-3m12 5v-3.5c0-1 .099-1.405-.5-2 2.791-.3 5.5-1.366 5.5-6.04a4.567 4.567 0 0 0 -1.333 -3.21 4.192 4.192 0 00-.08-3.227s-1.05-.3-3.476 1.267a12.334 12.334 0 0 0 -6.222 0C6.462 2.723 5.413 3.023 5.413 3.023a4.192 4.192 0 0 0 -.08 3.227A4.566 4.566 0 004 9.486c0 4.64 2.709 5.68 5.5 6.014-.591.589-.56 1.183-.5 2V21" /></svg>
+          <div class="flex items-center">
+            <p class="font-mono text-3xl ml-4 mb-3">{{$repository->name}}</p>
+          </div>
+        </div>
         <form class = "flex justify-evenly" action="{{ route('repository.compare', $id)}}" method="post">
             @csrf
 
@@ -404,11 +410,11 @@
 
         <div class="flex-cols">
           <div class ="flex">
-              <div class="">
-                <svg class="h-6 w-6 mt-1 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="3 17 9 11 13 15 21 7" />  <polyline points="14 7 21 7 21 14" /></svg> 
+              <div class="flex items-center">
+                <svg class="h-6 w-6 text-gray-500"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <circle cx="12" cy="12" r="10" />  <circle cx="12" cy="12" r="3" /></svg>
               </div>
               <p class="font-mono text-lg font-bold ml-2 dark:text-white">
-                achievement
+                Achievement
               </p>  
           </div>
         
@@ -438,7 +444,19 @@
         </div>
       </div>
 
-      <div class="w-full mt-4 p-4 rounded-xl shadow-md flex justify-between  border relative h-[360px]">
+      <div class="w-full mt-4 p-4 rounded-xl shadow-md flex justify-between  border relative h-[380px]">
+
+      <div class= "flex-cols">
+
+        <div class ="flex">
+          <div class="">
+            <svg class="h-6 w-6 mt-1 text-gray-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <polyline points="3 17 9 11 13 15 21 7" />  <polyline points="14 7 21 7 21 14" /></svg> 
+          </div>
+          <p class="font-mono text-lg font-bold ml-2 dark:text-white">
+            Commit Chart
+          </p>  
+        </div>
+          
         <div class="flex">
           <div class="ml-8">
             <canvas class ="h-80"id="myChart7"></canvas>
@@ -447,6 +465,9 @@
             <canvas class ="h-80"id="myChart8"></canvas>
           </div>
         </div>
+      </div>
+
+
       </div>
 
     </div>
